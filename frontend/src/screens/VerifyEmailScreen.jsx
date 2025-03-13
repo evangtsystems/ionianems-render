@@ -11,16 +11,18 @@ const VerifyEmailScreen = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
+  // ✅ Define backend URL properly
+  const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com";
+
   useEffect(() => {
     const verifyEmail = async () => {
+      console.log("📢 Verifying Email - Sending Request to:", `${backendURL}/api/users/verify/${token}`);
       try {
-        const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com";
         const { data } = await axios.get(`${backendURL}/api/users/verify/${token}`);
-        
+        console.log("✅ API Response:", data);
 
-        if (data.message === 'User already verified. Please log in.') {
-          // ✅ Skip showing the message and redirect immediately
-          navigate('/login?verified=true');
+        if (data?.message === 'User already verified. Please log in.') {
+          navigate('/login?verified=true'); // ✅ Redirect immediately
         } else {
           setMessage(data.message);
           setTimeout(() => {
@@ -29,9 +31,9 @@ const VerifyEmailScreen = () => {
         }
       } catch (err) {
         const errorMsg = err.response?.data?.message || 'Invalid or expired token';
+        console.error("🚨 Email Verification Error:", errorMsg);
 
         if (errorMsg.includes('expired') || errorMsg.includes('Invalid token')) {
-          // ✅ Skip showing the error and just redirect
           navigate('/login?verified=false');
         } else {
           setError(errorMsg);
@@ -42,7 +44,7 @@ const VerifyEmailScreen = () => {
     };
 
     verifyEmail();
-  }, [token, navigate]);
+  }, [token, navigate, backendURL]); // ✅ Ensure backendURL is a dependency
 
   return (
     <Container className="text-center">
