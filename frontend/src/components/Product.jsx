@@ -6,17 +6,16 @@ import Rating from './Rating';
 const Product = ({ product }) => {
   const { userInfo } = useSelector((state) => state.auth); // Get logged-in user info
 
+  const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com"; // ✅ Moved outside JSX
+
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/product/${product._id}`}>
-      const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com";
-
-<Card.Img
-  src={`${backendURL}${product.image.replace(/\.(jpg|jpeg|png)$/i, ".webp")}`} // Convert to WebP
-  alt={product.name}
-  variant='top'
-/>
-
+        <Card.Img
+          src={`${backendURL}${product.image.replace(/\.(jpg|jpeg|png)$/i, ".webp")}`} // ✅ Corrected Syntax
+          alt={product.name}
+          variant='top'
+        />
       </Link>
 
       <Card.Body>
@@ -37,7 +36,7 @@ const Product = ({ product }) => {
           <Card.Text as='h3'>${product.price}</Card.Text>
         ) : (
           <Link to='/register'>
-            <Card.Text as='h5' color='blue' >
+            <Card.Text as='h5' style={{ color: 'blue' }}> {/* ✅ Fixed `color` prop */}
               Register to see price
             </Card.Text>
           </Link>
