@@ -21,23 +21,21 @@ const VerifyEmailScreen = () => {
         const { data } = await axios.get(`${backendURL}/api/users/verify/${token}`);
         console.log("✅ API Response:", data);
 
-        if (data?.message === 'User already verified. Please log in.') {
-          navigate('/login?verified=true'); // ✅ Redirect immediately
-        } else {
+        if (data?.message === 'Email verified! You can now log in.') {
           setMessage(data.message);
           setTimeout(() => {
-            navigate('/login?verified=true');
+            navigate('/login?verified=true'); // ✅ Redirect after 3 seconds
+          }, 3000);
+        } else {
+          setMessage('Verification successful. Redirecting...');
+          setTimeout(() => {
+            navigate('/login');
           }, 3000);
         }
       } catch (err) {
         const errorMsg = err.response?.data?.message || 'Invalid or expired token';
         console.error("🚨 Email Verification Error:", errorMsg);
-
-        if (errorMsg.includes('expired') || errorMsg.includes('Invalid token')) {
-          navigate('/login?verified=false');
-        } else {
-          setError(errorMsg);
-        }
+        setError(errorMsg);
       } finally {
         setLoading(false);
       }
