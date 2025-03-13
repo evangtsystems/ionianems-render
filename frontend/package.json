@@ -12,6 +12,7 @@
     "i18next": "^23.2.3",
     "i18next-browser-languagedetector": "^8.0.3",
     "i18next-http-backend": "^3.0.2",
+    "proshop2": "file:..",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.9",
     "react-cookie-consent": "^9.0.0",
