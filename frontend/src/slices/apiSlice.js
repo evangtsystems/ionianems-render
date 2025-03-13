@@ -2,7 +2,7 @@ import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
 import { logout } from './authSlice';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.REACT_APP_API_URL || 'http://localhost:5000',
+  baseUrl: process.env.REACT_APP_API_URL || 'https://ionianems-backend.onrender.com',
   credentials: 'include', // Ensures cookies (JWT) are sent with requests
 });
 
