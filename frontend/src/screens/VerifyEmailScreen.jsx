@@ -14,7 +14,9 @@ const VerifyEmailScreen = () => {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/users/verify/${token}`);
+        const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com";
+        const { data } = await axios.get(`${backendURL}/api/users/verify/${token}`);
+        
 
         if (data.message === 'User already verified. Please log in.') {
           // ✅ Skip showing the message and redirect immediately
