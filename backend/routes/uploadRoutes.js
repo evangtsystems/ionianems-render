@@ -8,7 +8,8 @@ const router = express.Router();
 const __dirname = path.resolve();
 
 // Ensure "uploads/" and "our_work/" directories exist
-const uploadDir = path.join(__dirname, 'uploads');
+const uploadDir = path.join(__dirname, 'backend', 'uploads');
+
 const ourWorkDir = path.join(uploadDir, 'our_work');
 
 if (!fs.existsSync(uploadDir)) {
@@ -71,11 +72,13 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     await processImage(req.file.buffer, outputPath, 'webp');
 
-    res.status(200).json({
-      success: true,
-      message: 'Image uploaded successfully',
-      filePath: `/uploads/${filename}`,
-    });
+    const backendURL = process.env.BACKEND_URL || "https://ionianems-backend.onrender.com";
+res.status(200).json({
+  success: true,
+  message: 'Image uploaded successfully',
+  filePath: `${backendURL}/uploads/${filename}`,
+});
+
 
   } catch (error) {
     console.error("🚨 Error Processing Image:", error.message);
@@ -98,9 +101,9 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Our Work image uploaded successfully',
-      filePath: `/uploads/our_work/${filename}`,
+      filePath: `${backendURL}/uploads/our_work/${filename}`,
     });
-
+    
   } catch (error) {
     console.error("🚨 Error Processing 'Our Work' Image:", error.message);
     res.status(500).json({ success: false, message: 'Error processing image' });
