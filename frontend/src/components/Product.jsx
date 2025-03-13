@@ -9,7 +9,14 @@ const Product = ({ product }) => {
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image} variant='top' />
+      const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com";
+
+<Card.Img
+  src={`${backendURL}${product.image.replace(/\.(jpg|jpeg|png)$/i, ".webp")}`} // Convert to WebP
+  alt={product.name}
+  variant='top'
+/>
+
       </Link>
 
       <Card.Body>
