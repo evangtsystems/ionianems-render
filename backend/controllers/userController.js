@@ -104,7 +104,8 @@ const verifyEmail = asyncHandler(async (req, res) => {
     let user = await User.findOne({ email: decoded.email });
     if (user) {
       if (user.isVerified) {
-        return res.redirect(`${process.env.FRONTEND_URL}/login?verified=true`);
+        return res.redirect(`${process.env.FRONTEND_URL}/#/login?verified=true`);
+
       }
       // If user exists but not verified, update verification status
       user.isVerified = true;
