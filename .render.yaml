@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ionianems-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    publishPath: frontend/build
+    headers:
+      - source: /**
+        headers:
+          - key: Cache-Control
+            value: "max-age=0, no-cache, no-store, must-revalidate"
+    rewrites:
+      - source: /*
+        destination: /index.html
