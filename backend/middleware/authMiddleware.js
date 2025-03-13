@@ -4,20 +4,20 @@ import User from '../models/userModel.js';
 
 // User must be authenticated
 const protect = asyncHandler(async (req, res, next) => {
-  let token;
+  let token = req.cookies.jwt; // First check the token in cookies
 
-  // Read JWT from the 'jwt' cookie
-  token = req.cookies.jwt;
+  if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    // If no cookie, check Authorization header
+    token = req.headers.authorization.split(' ')[1];
+  }
 
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
       req.user = await User.findById(decoded.userId).select('-password');
-
       next();
     } catch (error) {
-      console.error(error);
+      console.error('🚨 Token Verification Failed:', error);
       res.status(401);
       throw new Error('Not authorized, token failed');
     }
