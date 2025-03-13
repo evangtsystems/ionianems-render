@@ -7,7 +7,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import {
-  createBrowserRouter,
+   createHashRouter 
+,
   createRoutesFromElements,
   Route,
   RouterProvider,
@@ -42,7 +43,7 @@ import CategoryProductsScreen from './screens/CategoryProductsScreen';
 import AdminBulkUploadScreen from './screens/admin/AdminBulkUploadScreen';
 
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
