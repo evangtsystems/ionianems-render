@@ -72,7 +72,7 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     await processImage(req.file.buffer, outputPath, 'webp');
 
-    const backendURL = process.env.BACKEND_URL || "https://ionianems-backend.onrender.com";
+    const backendURL = process.env.BACKEND_URL?.replace(/\/$/, '') || "https://ionianems-backend.onrender.com";
 res.status(200).json({
   success: true,
   message: 'Image uploaded successfully',
