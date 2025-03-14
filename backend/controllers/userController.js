@@ -23,6 +23,12 @@ const authUser = asyncHandler(async (req, res) => {
       throw new Error('Please verify your email before logging in.');
     }
 
+    // Generate the token for the response
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '30d',
+    });
+
+    // Set JWT as an HTTP-only cookie
     generateToken(res, user._id);
 
     res.json({
@@ -30,12 +36,14 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token, // Include token in response
     });
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
   }
 });
+
 
 // @desc    Register a new user & send verification email
 // @route   POST /api/users
