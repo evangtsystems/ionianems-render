@@ -12,13 +12,11 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.userInfo = action.payload;
-      localStorage.setItem('userInfo', JSON.stringify(action.payload));
+      localStorage.setItem('userInfo', JSON.stringify(action.payload)); // ✅ Store token in localStorage
     },
-    logout: (state, action) => {
+    logout: (state) => {
       state.userInfo = null;
-      // NOTE: here we need to also remove the cart from storage so the next
-      // logged in user doesn't inherit the previous users cart and shipping
-      localStorage.clear();
+      localStorage.clear(); // ❗ Clears everything (cart, preferences, etc.)
     },
   },
 });
