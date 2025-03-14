@@ -75,15 +75,19 @@ router.post('/', upload.single('image'), async (req, res) => {
     const backendURL = process.env.BACKEND_URL?.trim().replace(/\/$/, '') || "https://ionianems-backend.onrender.com";
 
     const imagePath = `/uploads/${filename}`;
-    const fullImageURL = `${backendURL}${imagePath}`;
-    
-    console.log("✅ Final Image URL:", fullImageURL);
-    
-    res.status(200).json({
-      success: true,
-      message: 'Image uploaded successfully',
-      filePath: fullImageURL,
-    });
+const fullImageURL = `${backendURL}${imagePath}`;
+
+// 🛠️ Log URL to Debug
+console.log("✅ Backend URL:", backendURL);
+console.log("✅ Image Path:", imagePath);
+console.log("✅ Final Image URL:", fullImageURL);
+
+res.status(200).json({
+  success: true,
+  message: 'Image uploaded successfully',
+  filePath: fullImageURL, // ✅ Fixed!
+});
+
     
 
 
