@@ -61,7 +61,8 @@ app.get('/api/config/paypal', (req, res) =>
 );
 
 // ✅ Serve Uploads Folder (Fix for Missing Images)
-app.use('/uploads', express.static(path.join(__dirname, 'backend', 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 
 // ✅ Root API Response

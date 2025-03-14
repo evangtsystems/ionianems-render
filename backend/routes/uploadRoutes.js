@@ -8,7 +8,7 @@ const router = express.Router();
 const __dirname = path.resolve();
 
 // Ensure "uploads/" and "our_work/" directories exist
-const uploadDir = path.join(__dirname, 'backend', 'uploads');
+const uploadDir = path.join(__dirname,  'uploads');
 
 const ourWorkDir = path.join(uploadDir, 'our_work');
 
