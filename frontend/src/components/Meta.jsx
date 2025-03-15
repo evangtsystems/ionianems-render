@@ -5,15 +5,16 @@ const Meta = ({ title, description, keywords }) => {
     <Helmet>
       <title>{title}</title>
       <meta name='description' content={description} />
-      <meta name='keyword' content={keywords} />
+      <meta name='keywords' content={keywords} />
     </Helmet>
   );
 };
 
+// ✅ Fix: Change the default values to match your brand
 Meta.defaultProps = {
-  title: 'Welcome To ProShop',
-  description: 'We sell the best products for cheap',
-  keywords: 'electronics, buy electronics, cheap electroincs',
+  title: 'IONIANEMS - Your Marine Electrical Solutions',
+  description: 'Experts in marine electrical solutions for boats and yachts.',
+  keywords: 'marine electrical, boats, yachts, electrical solutions',
 };
 
 export default Meta;
