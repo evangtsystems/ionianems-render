@@ -10,6 +10,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     register: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}`,
@@ -17,43 +18,84 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     logout: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/logout`,
         method: 'POST',
       }),
     }),
+
     profile: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/profile`,
         method: 'PUT',
         body: data,
+        headers: (headers, { getState }) => {
+          const token = getState().auth.userInfo?.token;
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+          }
+          return headers;
+        },
       }),
     }),
+
     getUsers: builder.query({
       query: () => ({
         url: USERS_URL,
+        headers: (headers, { getState }) => {
+          const token = getState().auth.userInfo?.token;
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+          }
+          return headers;
+        },
       }),
       providesTags: ['User'],
       keepUnusedDataFor: 5,
     }),
+
     deleteUser: builder.mutation({
       query: (userId) => ({
         url: `${USERS_URL}/${userId}`,
         method: 'DELETE',
+        headers: (headers, { getState }) => {
+          const token = getState().auth.userInfo?.token;
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+          }
+          return headers;
+        },
       }),
     }),
+
     getUserDetails: builder.query({
       query: (id) => ({
         url: `${USERS_URL}/${id}`,
+        headers: (headers, { getState }) => {
+          const token = getState().auth.userInfo?.token;
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+          }
+          return headers;
+        },
       }),
       keepUnusedDataFor: 5,
     }),
+
     updateUser: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/${data.userId}`,
         method: 'PUT',
         body: data,
+        headers: (headers, { getState }) => {
+          const token = getState().auth.userInfo?.token;
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+          }
+          return headers;
+        },
       }),
       invalidatesTags: ['User'],
     }),
