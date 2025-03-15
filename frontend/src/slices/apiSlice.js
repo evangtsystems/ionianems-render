@@ -2,13 +2,18 @@ import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
 import { logout } from './authSlice';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.REACT_APP_API_URL || 'https://ionianems-backend.onrender.com',
-  credentials: 'include', // Ensures cookies (JWT) are sent
+  baseUrl: process.env.REACT_APP_API_URL || 'http://localhost:5000', // ✅ Use local backend
+  credentials: 'include', // ✅ Ensures cookies (JWT) are sent with requests
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.userInfo?.token;  // Get token from Redux store
+    const token = getState().auth.userInfo?.token; // ✅ Get token from Redux
+
     if (token) {
-      headers.set('Authorization', `Bearer ${token}`); // Attach token to every request
+      headers.set('Authorization', `Bearer ${token}`); // ✅ Attach token
+      console.log("✅ Sending API Request with Token:", token);
+    } else {
+      console.warn("🚨 No Token Found! Requests May Fail.");
     }
+
     return headers;
   },
 });
@@ -18,9 +23,8 @@ const baseQueryWithAuth = async (args, api, extra) => {
 
   if (result.error) {
     const status = result.error.status;
-
-    // If unauthorized (401) or forbidden (403), log out the user
     if (status === 401 || status === 403) {
+      console.warn("🚨 Token expired or invalid. Logging out user.");
       api.dispatch(logout());
     }
   }
@@ -29,7 +33,7 @@ const baseQueryWithAuth = async (args, api, extra) => {
 };
 
 export const apiSlice = createApi({
-  baseQuery: baseQueryWithAuth, // Use the customized baseQuery
+  baseQuery: baseQueryWithAuth,
   tagTypes: ['Product', 'Order', 'User'],
   endpoints: (builder) => ({}),
 });

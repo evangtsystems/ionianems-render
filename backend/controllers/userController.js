@@ -13,23 +13,34 @@ const EMAIL_TOKEN_EXPIRES_IN = process.env.EMAIL_TOKEN_EXPIRES_IN || '1d';
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    // Allow admins to log in without email verification
     if (!user.isVerified && !user.isAdmin) {
       res.status(401);
       throw new Error('Please verify your email before logging in.');
     }
 
-    generateToken(res, user._id);
+    // ✅ Generate token correctly
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '30d',
+    });
 
+    // ✅ Set token as HTTP-Only cookie
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+
+    // ✅ Return token in response
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token,  // ✅ Ensure token is included
     });
   } else {
     res.status(401);

@@ -44,17 +44,13 @@ const LoginScreen = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
+      dispatch(setCredentials(res)); // ✅ Store the token in Redux
       navigate(redirect);
     } catch (err) {
-      if (err?.data?.message?.includes('verify your email')) {
-        setPendingVerification(true);
-        toast.error('Please verify your email before logging in.');
-      } else {
-        toast.error(err?.data?.message || err.error);
-      }
+      toast.error(err?.data?.message || err.error);
     }
   };
+  
 
   return (
     <FormContainer>
