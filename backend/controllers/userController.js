@@ -21,28 +21,13 @@ const authUser = asyncHandler(async (req, res) => {
       throw new Error('Please verify your email before logging in.');
     }
 
-<<<<<<< HEAD
     // ✅ Generate token correctly
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: '30d',
     });
-=======
-    // Generate the token for the response
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '30d',
-    });
-
-    // Set JWT as an HTTP-only cookie
-    generateToken(res, user._id);
->>>>>>> fa0246cec0bda39b5c84f1aa105c26dd6e8a3bb7
 
     // ✅ Set token as HTTP-Only cookie
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
-      sameSite: 'strict',
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
+    generateToken(res, user._id);
 
     // ✅ Return token in response
     res.json({
@@ -50,18 +35,13 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-<<<<<<< HEAD
       token,  // ✅ Ensure token is included
-=======
-      token, // Include token in response
->>>>>>> fa0246cec0bda39b5c84f1aa105c26dd6e8a3bb7
     });
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
   }
 });
-
 
 // @desc    Register a new user & send verification email
 // @route   POST /api/users
@@ -103,7 +83,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const verificationUrl = `${process.env.FRONTEND_URL}/#/verify-email/${emailToken}`;
 
-
   // Send verification email
   const message = `Please verify your email by clicking the link: ${verificationUrl}`;
   try {
@@ -132,7 +111,6 @@ const verifyEmail = asyncHandler(async (req, res) => {
     if (user) {
       if (user.isVerified) {
         return res.redirect(`${process.env.FRONTEND_URL}/#/login?verified=true`);
-
       }
       // If user exists but not verified, update verification status
       user.isVerified = true;
@@ -147,7 +125,6 @@ const verifyEmail = asyncHandler(async (req, res) => {
       });
     }
 
-    // Send a JSON response
     res.status(200).json({ success: true, message: 'Email verified! You can now log in.' });
   } catch (error) {
     res.status(400).json({ message: 'Invalid or expired token' });
@@ -250,6 +227,9 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Delete user account
+// @route   DELETE /api/users/profile
+// @access  Private
 const deleteUserAccount = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {
@@ -259,7 +239,6 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
   await User.deleteOne({ _id: req.user._id });
   res.json({ message: "User data deleted successfully" });
 });
-
 
 // @desc    Update user
 // @route   PUT /api/users/:id

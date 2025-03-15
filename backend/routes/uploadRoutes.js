@@ -8,12 +8,7 @@ const router = express.Router();
 const __dirname = path.resolve();
 
 // Ensure "uploads/" and "our_work/" directories exist
-<<<<<<< HEAD
 const uploadDir = path.join(__dirname, 'uploads');
-=======
-const uploadDir = path.join(__dirname,  'uploads');
-
->>>>>>> fa0246cec0bda39b5c84f1aa105c26dd6e8a3bb7
 const ourWorkDir = path.join(uploadDir, 'our_work');
 
 if (!fs.existsSync(uploadDir)) {
@@ -34,16 +29,16 @@ const processImage = async (fileBuffer, outputPath, format = 'webp') => {
     // Get original image metadata
     const metadata = await sharp(fileBuffer).metadata();
     const { width, height } = metadata;
-    
+
     console.log(`📏 Original Image Size: ${width}x${height}`);
 
     // Define new dimensions (Keep aspect ratio & avoid unnecessary scaling)
-    let newWidth = width > 1024 ? 1024 : width; 
-    let newHeight = Math.round((height / width) * newWidth); 
+    let newWidth = width > 1024 ? 1024 : width;
+    let newHeight = Math.round((height / width) * newWidth);
 
     // Ensure minimum dimensions to avoid upscaling small images
     if (newWidth < 300 || newHeight < 214) {
-      newWidth = width; 
+      newWidth = width;
       newHeight = height;
     }
 
@@ -58,7 +53,6 @@ const processImage = async (fileBuffer, outputPath, format = 'webp') => {
 
     await processedImage.toFile(outputPath);
     console.log(`✅ Image processed & saved: ${outputPath}`);
-
   } catch (error) {
     console.error("🚨 Error processing image:", error.message);
   }
@@ -76,33 +70,21 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     await processImage(req.file.buffer, outputPath, 'webp');
 
-<<<<<<< HEAD
+    // ✅ Ensure correct backend URL formatting
+    const backendURL = process.env.BACKEND_URL?.trim().replace(/\/$/, '') || "https://ionianems-backend.onrender.com";
+    const imagePath = `/uploads/${filename}`;
+    const fullImageURL = `${backendURL}${imagePath}`;
+
+    // 🛠️ Log URL to Debug
+    console.log("✅ Backend URL:", backendURL);
+    console.log("✅ Image Path:", imagePath);
+    console.log("✅ Final Image URL:", fullImageURL);
+
     res.status(200).json({
       success: true,
       message: 'Image uploaded successfully',
-      filePath: `/uploads/${filename}`,
+      filePath: fullImageURL, // ✅ Fixed URL issue
     });
-=======
-    const backendURL = process.env.BACKEND_URL?.trim().replace(/\/$/, '') || "https://ionianems-backend.onrender.com";
-
-    const imagePath = `/uploads/${filename}`;
-const fullImageURL = `${backendURL}${imagePath}`;
-
-// 🛠️ Log URL to Debug
-console.log("✅ Backend URL:", backendURL);
-console.log("✅ Image Path:", imagePath);
-console.log("✅ Final Image URL:", fullImageURL);
-
-res.status(200).json({
-  success: true,
-  message: 'Image uploaded successfully',
-  filePath: fullImageURL, // ✅ Fixed!
-});
-
-    
-
->>>>>>> fa0246cec0bda39b5c84f1aa105c26dd6e8a3bb7
-
   } catch (error) {
     console.error("🚨 Error Processing Image:", error.message);
     res.status(500).json({ success: false, message: 'Error processing image' });
@@ -121,10 +103,14 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
 
     await processImage(req.file.buffer, outputPath, 'jpeg');
 
+    const backendURL = process.env.BACKEND_URL?.trim().replace(/\/$/, '') || "https://ionianems-backend.onrender.com";
+    const imagePath = `/uploads/our_work/${filename}`;
+    const fullImageURL = `${backendURL}${imagePath}`;
+
     res.status(200).json({
       success: true,
       message: 'Our Work image uploaded successfully',
-      filePath: `/uploads/our_work/${filename}`,
+      filePath: fullImageURL,
     });
 
   } catch (error) {
@@ -153,6 +139,7 @@ router.get('/our-work/images', (req, res) => {
   });
 });
 
+// 🔹 Bulk Image Upload Route (Adaptive)
 router.post('/bulk-upload/:category', upload.array('images', 23), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
@@ -167,7 +154,6 @@ router.post('/bulk-upload/:category', upload.array('images', 23), async (req, re
     }
 
     const uploadedImages = [];
-
     for (const file of req.files) {
       const filename = `${Date.now()}-${file.originalname.replace(/\s/g, '_')}.webp`;
       const outputPath = path.join(categoryPath, filename);
@@ -193,4 +179,5 @@ router.post('/bulk-upload/:category', upload.array('images', 23), async (req, re
     res.status(500).json({ success: false, message: 'Error processing images' });
   }
 });
+
 export default router;
