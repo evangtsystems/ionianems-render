@@ -23,28 +23,36 @@ if (!fs.existsSync(ourWorkDir)) {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// 🔹 Adaptive Image Processing Function (Ensures 360x438px)
 const processImage = async (fileBuffer, outputPath, format = 'webp') => {
   try {
-    const targetWidth = 360;
-    const targetHeight = 438;
+    const metadata = await sharp(fileBuffer).metadata();
+    let { width, height } = metadata;
 
-    console.log(`📏 Resizing and Cropping to: ${targetWidth}x${targetHeight}`);
+    console.log(`📏 Original Image Size: ${width}x${height}`);
 
-    // Resize & Crop to Fit Exactly 360x438
-    const processedImage = sharp(fileBuffer)
-      .resize(targetWidth, targetHeight, { fit: 'cover', position: 'center' }) // Crop centrally
-      .sharpen() // Enhance sharpness
-      .modulate({ brightness: 1.05, contrast: 1.1 }) // Light contrast boost
-      .toFormat(format, { quality: 90 });
+    // Define new dimensions (Max width: 1024, keeping aspect ratio)
+    let newWidth = width > 1024 ? 1024 : width;
+    let newHeight = Math.round((height / width) * newWidth);
 
-    await processedImage.toFile(outputPath);
+    // Ensure reasonable minimum dimensions but avoid upscaling
+    if (newWidth < 300) newWidth = 300;
+    if (newHeight < 214) newHeight = 214;
+
+    console.log(`🔧 Resizing to: ${newWidth}x${newHeight}`);
+
+    // Apply processing
+    await sharp(fileBuffer)
+      .resize({ width: newWidth, height: newHeight, fit: 'inside' }) // No upscaling
+      .sharpen(0.5) // Prevent over-sharpening
+      .modulate({ brightness: 1.02, contrast: 1.05 }) // Subtle enhancement
+      .toFormat(format, { quality: 90 })
+      .toFile(outputPath);
+
     console.log(`✅ Image processed & saved: ${outputPath}`);
   } catch (error) {
-    console.error("🚨 Error processing image:", error.message);
+    console.error("🚨 Error processing image:", error);
   }
 };
-
 
 router.post('/', upload.single('image'), async (req, res) => {
   try {
