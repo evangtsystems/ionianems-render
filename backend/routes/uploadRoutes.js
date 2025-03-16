@@ -58,7 +58,6 @@ const processImage = async (fileBuffer, outputPath, format = 'webp') => {
   }
 };
 
-// 🔹 General Image Upload Route (Adaptive)
 router.post('/', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -70,26 +69,21 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     await processImage(req.file.buffer, outputPath, 'webp');
 
-    // ✅ Ensure correct backend URL formatting
-    const backendURL = process.env.BACKEND_URL?.trim().replace(/\/$/, '') || "https://ionianems-backend.onrender.com";
+    // ✅ Always return only the relative path
     const imagePath = `/uploads/${filename}`;
-    const fullImageURL = `${backendURL}${imagePath}`;
-
-    // 🛠️ Log URL to Debug
-    console.log("✅ Backend URL:", backendURL);
-    console.log("✅ Image Path:", imagePath);
-    console.log("✅ Final Image URL:", fullImageURL);
 
     res.status(200).json({
       success: true,
       message: 'Image uploaded successfully',
-      filePath: fullImageURL, // ✅ Fixed URL issue
+      filePath: imagePath, // 🔹 Only relative path, no full URL
     });
+
   } catch (error) {
     console.error("🚨 Error Processing Image:", error.message);
     res.status(500).json({ success: false, message: 'Error processing image' });
   }
 });
+
 
 // 🔹 'Our Work' Image Upload Route (Adaptive)
 router.post('/our-work', upload.single('image'), async (req, res) => {
