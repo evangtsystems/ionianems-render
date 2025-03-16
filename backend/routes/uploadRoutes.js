@@ -23,6 +23,7 @@ if (!fs.existsSync(ourWorkDir)) {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+// 🔹 Adaptive Image Processing Function (Ensures 360x438px)
 const processImage = async (fileBuffer, outputPath, format = 'webp') => {
   try {
     const targetWidth = 360;
@@ -30,9 +31,9 @@ const processImage = async (fileBuffer, outputPath, format = 'webp') => {
 
     console.log(`📏 Resizing and Cropping to: ${targetWidth}x${targetHeight}`);
 
-    // Process image: Resize & Crop to fit exactly in the container
+    // Resize & Crop to Fit Exactly 360x438
     const processedImage = sharp(fileBuffer)
-      .resize(targetWidth, targetHeight, { fit: 'cover' }) // Crop to exact size
+      .resize(targetWidth, targetHeight, { fit: 'cover', position: 'center' }) // Crop centrally
       .sharpen() // Enhance sharpness
       .modulate({ brightness: 1.05, contrast: 1.1 }) // Light contrast boost
       .toFormat(format, { quality: 90 });
