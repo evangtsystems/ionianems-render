@@ -23,30 +23,16 @@ if (!fs.existsSync(ourWorkDir)) {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// 🔹 Adaptive Image Processing Function
 const processImage = async (fileBuffer, outputPath, format = 'webp') => {
   try {
-    // Get original image metadata
-    const metadata = await sharp(fileBuffer).metadata();
-    const { width, height } = metadata;
+    const targetWidth = 360;
+    const targetHeight = 438;
 
-    console.log(`📏 Original Image Size: ${width}x${height}`);
+    console.log(`📏 Resizing and Cropping to: ${targetWidth}x${targetHeight}`);
 
-    // Define new dimensions (Keep aspect ratio & avoid unnecessary scaling)
-    let newWidth = width > 1024 ? 1024 : width;
-    let newHeight = Math.round((height / width) * newWidth);
-
-    // Ensure minimum dimensions to avoid upscaling small images
-    if (newWidth < 300 || newHeight < 214) {
-      newWidth = width;
-      newHeight = height;
-    }
-
-    console.log(`🔧 Resizing to: ${newWidth}x${newHeight}`);
-
-    // Apply adaptive image processing
+    // Process image: Resize & Crop to fit exactly in the container
     const processedImage = sharp(fileBuffer)
-      .resize(newWidth, newHeight, { fit: 'inside' }) // Avoid upscaling
+      .resize(targetWidth, targetHeight, { fit: 'cover' }) // Crop to exact size
       .sharpen() // Enhance sharpness
       .modulate({ brightness: 1.05, contrast: 1.1 }) // Light contrast boost
       .toFormat(format, { quality: 90 });
