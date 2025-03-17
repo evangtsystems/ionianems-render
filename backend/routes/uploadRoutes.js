@@ -57,23 +57,21 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-/** ✅ 'Our Work' Image Upload Route **/
+import { v2 as cloudinary } from 'cloudinary';
+
+// ✅ Upload "Our Work" Images to Cloudinary
 router.post('/our-work', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'No file uploaded!' });
     }
 
-    // Cloudinary upload using stream
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.v2.uploader.upload_stream(
-        { folder: 'uploads/our_work' },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        }
-      );
-      streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+    // ✅ Upload to Cloudinary under "uploads/our_work/"
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'uploads/our_work', // ✅ Store in "uploads/our_work/"
+      use_filename: true,
+      unique_filename: false,
+      resource_type: 'image',
     });
 
     console.log('✅ Our Work Image URL:', result.secure_url);
@@ -81,13 +79,15 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Our Work image uploaded successfully',
-      filePath: result.secure_url, // ✅ Return Cloudinary URL
+      filePath: result.secure_url, // ✅ Cloudinary URL
     });
+
   } catch (error) {
     console.error("🚨 Error Uploading 'Our Work' Image:", error);
     res.status(500).json({ success: false, message: 'Error uploading image' });
   }
 });
+
 
 /** ✅ Bulk Image Upload Route (Max 10 Images) **/
 router.post('/bulk-upload', upload.array('images', 10), async (req, res) => {
@@ -142,19 +142,24 @@ router.get('/images', async (req, res) => {
 });
 
 /** ✅ Get All 'Our Work' Images **/
+// ✅ Get All "Our Work" Images from Cloudinary
 router.get('/our-work/images', async (req, res) => {
   try {
-    const { resources } = await cloudinary.v2.search
-      .expression('folder:uploads/our_work')
-      .sort_by('created_at', 'desc')
-      .max_results(50)
-      .execute();
+    const { resources } = await cloudinary.api.resources({
+      type: 'upload',
+      prefix: 'uploads/our_work/', // ✅ Fetch from "uploads/our_work/"
+      max_results: 50, // Adjust as needed
+    });
+
+    if (!resources || resources.length === 0) {
+      return res.status(404).json({ success: false, message: 'No images found in our_work folder.' });
+    }
 
     const imageUrls = resources.map(file => file.secure_url);
     res.json(imageUrls);
   } catch (error) {
     console.error("🚨 Error Fetching Our Work Images:", error);
-    res.status(500).json({ success: false, message: 'Error fetching images' });
+    res.status(500).json({ success: false, message: 'Error fetching images from Cloudinary.' });
   }
 });
 
