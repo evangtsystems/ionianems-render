@@ -68,35 +68,25 @@ router.post('/', upload.single('image'), async (req, res) => {
 // ✅ Upload "Our Work" Images to Cloudinary
 router.post('/our-work', upload.single('image'), async (req, res) => {
   try {
-    if (!req.file || !req.file.buffer) {
-      return res.status(400).json({ success: false, message: 'No file uploaded!' });
+    console.log('🔍 Debugging upload...');
+    console.log('📂 req.file:', req.file); // ✅ Log the received file
+    console.log('📂 req.body:', req.body); // ✅ Log the body
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: '🚨 No file uploaded!' });
     }
 
-    const streamUpload = (buffer) => {
-      return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: 'uploads/our_work' }, // ✅ Ensure correct Cloudinary folder
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
-        );
-        streamifier.createReadStream(buffer).pipe(stream);
-      });
-    };
+    console.log('✅ File received:', req.file.originalname);
 
-    const result = await streamUpload(req.file.buffer);
-    console.log('✅ Our Work Image Uploaded:', result.secure_url);
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: 'Our Work image uploaded successfully',
-      filePath: result.secure_url, // ✅ Return Cloudinary URL
+      message: '✅ Image uploaded successfully!',
+      filePath: req.file.path, // ✅ Return Cloudinary URL
     });
 
   } catch (error) {
     console.error("🚨 Error Uploading 'Our Work' Image:", error);
-    res.status(500).json({ success: false, message: 'Error uploading image' });
+    return res.status(500).json({ success: false, message: '🚨 Error uploading image' });
   }
 });
 
