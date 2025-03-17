@@ -7,15 +7,31 @@ import Footer from "./components/Footer";
 import { logout } from "./slices/authSlice";
 import CookieConsent from "react-cookie-consent";
 import { I18nextProvider } from "react-i18next";
-import i18n from "./locales/i18n"; // Import i18n here
+import i18n from "./locales/i18n"; // ✅ Import i18n here
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios"; // ✅ Import axios
 
-const App = () => {
+// ✅ Keep backend alive function
+const keepBackendAlive = () => {
+  setInterval(async () => {
+    try {
+      await axios.get("https://ionianems-backend.onrender.com/ping");
+    } catch (error) {
+      console.error("Backend inactive:", error);
+    }
+  }, 5 * 60 * 1000); // Every 5 minutes
+};
+
+function App() {
   const dispatch = useDispatch();
   const [cookiesAccepted, setCookiesAccepted] = useState(false);
   const [showModifyConsent, setShowModifyConsent] = useState(false);
   const [isI18nReady, setIsI18nReady] = useState(i18n.isInitialized); // ✅ Starts with i18n state
+
+  useEffect(() => {
+    keepBackendAlive(); // ✅ Runs backend keep-alive function
+  }, []);
 
   useEffect(() => {
     // ✅ If already initialized, set immediately
@@ -119,6 +135,6 @@ const App = () => {
       <Footer />
     </I18nextProvider>
   );
-};
+}
 
 export default App;
