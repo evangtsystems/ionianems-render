@@ -72,16 +72,36 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
     console.log('📂 req.file:', req.file); // ✅ Log the received file
     console.log('📂 req.body:', req.body); // ✅ Log the body
 
-    if (!req.file) {
+    if (!req.file || !req.file.buffer) {
       return res.status(400).json({ success: false, message: '🚨 No file uploaded!' });
     }
 
-    console.log('✅ File received:', req.file.originalname);
+    const streamUpload = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'uploads/our_work',
+            format: 'webp',
+            transformation: [
+              { width: 800, height: 600, crop: 'fill', gravity: 'auto' }, // ✅ Resizes to 800x600, crops if needed
+            ],
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+    };
+
+    const result = await streamUpload();
+    console.log('✅ Our Work Image Uploaded:', result.secure_url);
 
     return res.status(200).json({
       success: true,
       message: '✅ Image uploaded successfully!',
-      filePath: req.file.path, // ✅ Return Cloudinary URL
+      filePath: result.secure_url, // ✅ Cloudinary URL
     });
 
   } catch (error) {
@@ -89,6 +109,8 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
     return res.status(500).json({ success: false, message: '🚨 Error uploading image' });
   }
 });
+
+
 
 /** ✅ Bulk Image Upload Route (Max 10 Images) **/
 router.post('/bulk-upload', upload.array('images', 10), async (req, res) => {
