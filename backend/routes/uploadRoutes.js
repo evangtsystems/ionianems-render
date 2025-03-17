@@ -11,14 +11,22 @@ dotenv.config();
 
 const router = express.Router();
 
-// ✅ Cloudinary Multer Storage Configuration
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
-    folder: 'uploads',
-    format: async () => 'webp',
-    public_id: () => `image-${Date.now()}`,
-    transformation: [{ width: 1024, crop: 'limit' }],
+  params: async (req, file) => {
+    let folder = 'uploads'; // Default folder
+
+    // Check if the request is for 'our-work' and change folder dynamically
+    if (req.url.includes('/our-work')) {
+      folder = 'uploads/our_work';
+    }
+
+    return {
+      folder,
+      format: 'webp',
+      public_id: `image-${Date.now()}`,
+      transformation: [{ width: 1024, crop: 'limit' }],
+    };
   },
 });
 
