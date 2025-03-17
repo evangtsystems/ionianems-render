@@ -30,20 +30,38 @@ const OurWork = () => {
   // Upload "Our Work" images to backend
   const handleImageUpload = async (event) => {
     if (!userInfo || !userInfo.isAdmin) return;
+  
     const file = event.target.files[0];
+    if (!file) {
+      toast.error('🚨 No file selected!');
+      return;
+    }
+  
     const formData = new FormData();
     formData.append('image', file);
+  
+    // ✅ Debugging: Log FormData contents
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
+  
     try {
+      console.log('Uploading image:', file.name);
+  
       const { data } = await axios.post('https://ionianems-backend.onrender.com/api/upload/our-work', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setImages([...images, data.filePath]); // ✅ Cloudinary URL saved
+  
+      console.log('✅ Image uploaded:', data.filePath);
+      setImages((prevImages) => [...prevImages, data.filePath]);
+  
       toast.success('✅ Image uploaded successfully!');
     } catch (error) {
-      console.error('🚨 Upload failed:', error);
-      toast.error('🚨 Upload failed!');
+      console.error('🚨 Upload failed:', error.response ? error.response.data : error.message);
+      toast.error(`🚨 Upload failed: ${error.response?.data?.message || 'Unknown error'}`);
     }
   };
+  
   
   return (
     <Container className="mt-5 text-center">
