@@ -34,17 +34,17 @@ const OurWork = () => {
     const formData = new FormData();
     formData.append('image', file);
     try {
-      const { data } = await axios.post('/api/upload/our-work', formData, {
+      const { data } = await axios.post('https://ionianems-backend.onrender.com/api/upload/our-work', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setImages([...images, data.filePath]);
+      setImages([...images, data.filePath]); // ✅ Cloudinary URL saved
       toast.success('✅ Image uploaded successfully!');
     } catch (error) {
       console.error('🚨 Upload failed:', error);
       toast.error('🚨 Upload failed!');
     }
   };
-
+  
   return (
     <Container className="mt-5 text-center">
       <ToastContainer />  {/* ✅ Add ToastContainer here */}

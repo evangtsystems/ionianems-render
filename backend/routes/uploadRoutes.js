@@ -4,6 +4,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import sharp from 'sharp';
 import dotenv from 'dotenv';
+import streamifier from 'streamifier';
 import '../config/cloudinary.js'; // ✅ Import Cloudinary Config
 
 dotenv.config();
@@ -59,26 +60,34 @@ router.post('/', upload.single('image'), async (req, res) => {
 
 
 // ✅ Upload "Our Work" Images to Cloudinary
+// ✅ Upload "Our Work" images to Cloudinary
 router.post('/our-work', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'No file uploaded!' });
     }
 
-    // ✅ Upload to Cloudinary under "uploads/our_work/"
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'uploads/our_work', // ✅ Store in "uploads/our_work/"
-      use_filename: true,
-      unique_filename: false,
-      resource_type: 'image',
-    });
+    // Convert file buffer to Cloudinary stream
+    const streamUpload = (buffer) => {
+      return new Promise((resolve, reject) => {
+        let stream = cloudinary.uploader.upload_stream(
+          { folder: 'uploads/our_work' }, // ✅ Ensure correct Cloudinary folder
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        streamifier.createReadStream(buffer).pipe(stream);
+      });
+    };
 
-    console.log('✅ Our Work Image URL:', result.secure_url);
+    const result = await streamUpload(req.file.buffer);
+    console.log('✅ Our Work Image Uploaded:', result.secure_url);
 
     res.status(200).json({
       success: true,
       message: 'Our Work image uploaded successfully',
-      filePath: result.secure_url, // ✅ Cloudinary URL
+      filePath: result.secure_url, // ✅ Return Cloudinary URL
     });
 
   } catch (error) {
@@ -86,6 +95,7 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
     res.status(500).json({ success: false, message: 'Error uploading image' });
   }
 });
+
 
 
 /** ✅ Bulk Image Upload Route (Max 10 Images) **/
