@@ -27,11 +27,10 @@ const upload = multer({ storage });
 // ✅ Image Processing Function (Resize + Optimize before uploading to Cloudinary)
 const processImage = async (fileBuffer) => {
   try {
-    const optimizedImage = await sharp(fileBuffer)
+    return await sharp(fileBuffer)
       .resize({ width: 1024, fit: 'inside' }) // Resize max width to 1024px
       .toFormat('webp', { quality: 90 }) // Convert to WebP
       .toBuffer();
-    return optimizedImage;
   } catch (error) {
     console.error("🚨 Error processing image:", error);
     throw new Error('Image processing failed');
@@ -58,19 +57,16 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-
 // ✅ Upload "Our Work" Images to Cloudinary
-// ✅ Upload "Our Work" images to Cloudinary
 router.post('/our-work', upload.single('image'), async (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.file || !req.file.buffer) {
       return res.status(400).json({ success: false, message: 'No file uploaded!' });
     }
 
-    // Convert file buffer to Cloudinary stream
     const streamUpload = (buffer) => {
       return new Promise((resolve, reject) => {
-        let stream = cloudinary.uploader.upload_stream(
+        const stream = cloudinary.uploader.upload_stream(
           { folder: 'uploads/our_work' }, // ✅ Ensure correct Cloudinary folder
           (error, result) => {
             if (error) reject(error);
@@ -96,8 +92,6 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
   }
 });
 
-
-
 /** ✅ Bulk Image Upload Route (Max 10 Images) **/
 router.post('/bulk-upload', upload.array('images', 10), async (req, res) => {
   try {
@@ -108,7 +102,7 @@ router.post('/bulk-upload', upload.array('images', 10), async (req, res) => {
     const uploadedImages = await Promise.all(
       req.files.map(async (file) => {
         return new Promise((resolve, reject) => {
-          const uploadStream = cloudinary.v2.uploader.upload_stream(
+          const uploadStream = cloudinary.uploader.upload_stream(
             { folder: 'uploads' },
             (error, result) => {
               if (error) return reject(error);
@@ -136,8 +130,8 @@ router.post('/bulk-upload', upload.array('images', 10), async (req, res) => {
 /** ✅ Get All Uploaded Images (Stored in Cloudinary) **/
 router.get('/images', async (req, res) => {
   try {
-    const { resources } = await cloudinary.v2.search
-      .expression('folder:uploads/')
+    const { resources } = await cloudinary.search
+      .expression('folder:uploads/*')
       .sort_by('created_at', 'desc')
       .max_results(50)
       .execute();
@@ -154,11 +148,11 @@ router.get('/images', async (req, res) => {
 // ✅ Get All "Our Work" Images from Cloudinary
 router.get('/our-work/images', async (req, res) => {
   try {
-    const { resources } = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: 'uploads/our_work/', // ✅ Fetch from "uploads/our_work/"
-      max_results: 50, // Adjust as needed
-    });
+    const { resources } = await cloudinary.search
+      .expression('folder:uploads/our_work/*') // ✅ Fetch from "uploads/our_work/"
+      .sort_by('created_at', 'desc')
+      .max_results(50)
+      .execute();
 
     if (!resources || resources.length === 0) {
       return res.status(404).json({ success: false, message: 'No images found in our_work folder.' });
