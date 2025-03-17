@@ -36,7 +36,7 @@ const upload = multer({ storage });
 const processImage = async (fileBuffer) => {
   try {
     return await sharp(fileBuffer)
-      .resize(1024, 768, { fit: 'cover', position: 'center' }) // ✅ Ensures fixed width & height
+      .resize(1024, 768, { fit: 'fill', position: 'center' }) // ✅ Ensures fixed width & height
       .toFormat('webp', { quality: 90 }) // ✅ Converts to WebP
       .toBuffer();
   } catch (error) {
