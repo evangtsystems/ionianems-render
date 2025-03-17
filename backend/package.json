@@ -33,6 +33,7 @@
         "react-i18next": "^15.4.1",
         "react-world-flags": "^1.6.0",
         "sharp": "^0.33.5",
+        "streamifier": "^0.1.1",
         "validator": "^13.12.0"
     },
     "devDependencies": {
