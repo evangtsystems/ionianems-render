@@ -72,36 +72,16 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
     console.log('📂 req.file:', req.file); // ✅ Log the received file
     console.log('📂 req.body:', req.body); // ✅ Log the body
 
-    if (!req.file || !req.file.buffer) {
+    if (!req.file) {
       return res.status(400).json({ success: false, message: '🚨 No file uploaded!' });
     }
 
-    const streamUpload = () => {
-      return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          {
-            folder: 'uploads/our_work',
-            format: 'webp',
-            transformation: [
-              { width: 800, height: 600, crop: 'fill', gravity: 'auto' }, // ✅ Resizes to 800x600, crops if needed
-            ],
-          },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
-        );
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
-      });
-    };
-
-    const result = await streamUpload();
-    console.log('✅ Our Work Image Uploaded:', result.secure_url);
+    console.log('✅ File received:', req.file.originalname);
 
     return res.status(200).json({
       success: true,
       message: '✅ Image uploaded successfully!',
-      filePath: result.secure_url, // ✅ Cloudinary URL
+      filePath: req.file.path, // ✅ Return Cloudinary URL
     });
 
   } catch (error) {
