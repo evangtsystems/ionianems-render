@@ -84,6 +84,6 @@ main {
 .card-img-top,
 .card-img-bottom {
     width: 100% !important;
-    height: 255px !important; /* ✅ Forces a fixed height */
+    height: 211px !important; /* ✅ Forces a fixed height */
     object-fit: cover !important; /* ✅ Crops excess areas while maintaining aspect ratio */
 }
