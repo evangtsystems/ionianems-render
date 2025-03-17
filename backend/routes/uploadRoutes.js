@@ -57,7 +57,6 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-import { v2 as cloudinary } from 'cloudinary';
 
 // ✅ Upload "Our Work" Images to Cloudinary
 router.post('/our-work', upload.single('image'), async (req, res) => {
