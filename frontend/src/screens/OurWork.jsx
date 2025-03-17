@@ -12,11 +12,11 @@ const OurWork = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [images, setImages] = useState([]);
 
-  // Fetch "Our Work" images from backend on load
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const { data } = await axios.get('/api/upload/our-work/images');
+        const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com"; // ✅ Fallback URL
+        const { data } = await axios.get(`${backendURL}/api/upload/our-work/images`);
         setImages(data);
       } catch (error) {
         console.error('🚨 Error fetching Our Work images:', error);
@@ -25,6 +25,7 @@ const OurWork = () => {
     };
     fetchImages();
   }, []);
+  
 
   // Upload "Our Work" images to backend
   const handleImageUpload = async (event) => {
