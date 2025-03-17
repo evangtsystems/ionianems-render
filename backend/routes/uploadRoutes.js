@@ -65,7 +65,6 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-// ✅ Upload "Our Work" Images to Cloudinary
 router.post('/our-work', upload.single('image'), async (req, res) => {
   try {
     console.log('🔍 Debugging upload...');
@@ -78,10 +77,21 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
 
     console.log('✅ File received:', req.file.originalname);
 
+    // ✅ Upload the image to Cloudinary with transformations
+    const uploadedImage = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'uploads/our_work',
+      format: 'webp', // ✅ Convert all images to WebP for better compression
+      transformation: [
+        { width: 800, height: 600, crop: 'fill', gravity: 'auto' } // ✅ Resize all images to 800x600
+      ],
+    });
+
+    console.log('✅ Our Work Image Uploaded:', uploadedImage.secure_url);
+
     return res.status(200).json({
       success: true,
       message: '✅ Image uploaded successfully!',
-      filePath: req.file.path, // ✅ Return Cloudinary URL
+      filePath: uploadedImage.secure_url, // ✅ Return Cloudinary URL
     });
 
   } catch (error) {
@@ -89,6 +99,7 @@ router.post('/our-work', upload.single('image'), async (req, res) => {
     return res.status(500).json({ success: false, message: '🚨 Error uploading image' });
   }
 });
+
 
 
 

@@ -89,11 +89,12 @@ const OurWork = () => {
               style={{ borderRadius: '20px', overflow: 'hidden' }}
             >
               <img 
-                src={img} 
-                alt={`Uploaded ${index}`} 
-                className="img-fluid rounded" 
-                style={{ width: '100%', height: 'auto', maxHeight: '600px', objectFit: 'cover', borderRadius: '20px' }}
-              />
+  src={img} 
+  alt={`Uploaded ${index}`} 
+  className="img-fluid rounded" 
+  style={{ width: '800px', height: '600px', objectFit: 'cover', borderRadius: '20px' }}
+/>
+
             </motion.div>
           </Col>
         ))}
