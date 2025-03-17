@@ -52,18 +52,22 @@ const ProductScreen = () => {
           <Meta title={product.name} description={product.description} />
           <Row>
             <Col md={6}>
-              <Image
-                src={product.image} // ✅ Directly using Cloudinary URL
-                alt={product.name}
-                fluid
-                style={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                  imageRendering: "high-quality",
-                }}
-                onError={(e) => e.target.src = "/images/placeholder.webp"} // ✅ Fallback if image fails
-              />
+            <Image
+  src={
+    product.image.includes("res.cloudinary.com")
+      ? product.image
+      : `https://ionianems-backend.onrender.com${product.image}`
+  }
+  alt={product.name}
+  fluid
+  style={{
+    maxWidth: "100%",
+    height: "auto",
+    objectFit: "contain",
+    imageRendering: "high-quality",
+  }}
+/>
+
             </Col>
             <Col md={3}>
               <ListGroup variant='flush'>

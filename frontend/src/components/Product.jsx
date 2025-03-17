@@ -9,12 +9,16 @@ const Product = ({ product }) => {
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/product/${product._id}`}>
-        <Card.Img
-          src={product.image} // ✅ Cloudinary URL (no need to modify it)
-          alt={product.name}
-          variant='top'
-          onError={(e) => e.target.src = "/images/placeholder.webp"} // ✅ Fallback if image fails
-        />
+      <Card.Img
+  src={
+    product.image.includes("res.cloudinary.com")
+      ? product.image
+      : `https://ionianems-backend.onrender.com${product.image}`
+  }
+  alt={product.name}
+  variant='top'
+/>
+
       </Link>
 
       <Card.Body>
