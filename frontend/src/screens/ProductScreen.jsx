@@ -35,8 +35,6 @@ const ProductScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [createReview, { isLoading: loadingProductReview }] = useCreateReviewMutation();
 
-  const backendURL = process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com"; // ✅ Moved here
-
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
     navigate('/cart');
@@ -55,7 +53,7 @@ const ProductScreen = () => {
           <Row>
             <Col md={6}>
               <Image
-                src={`${backendURL}${product.image.replace(/\.(jpg|jpeg|png)$/i, ".webp")}`}
+                src={product.image} // ✅ Directly using Cloudinary URL
                 alt={product.name}
                 fluid
                 style={{
@@ -64,6 +62,7 @@ const ProductScreen = () => {
                   objectFit: "contain",
                   imageRendering: "high-quality",
                 }}
+                onError={(e) => e.target.src = "/images/placeholder.webp"} // ✅ Fallback if image fails
               />
             </Col>
             <Col md={3}>
