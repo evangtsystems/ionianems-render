@@ -149,17 +149,15 @@ router.get('/images', async (req, res) => {
 router.get('/our-work/images', async (req, res) => {
   try {
     const { resources } = await cloudinary.search
-      .expression('folder:uploads/our_work/*') // ✅ Fetch from "uploads/our_work/"
+      .expression('folder:uploads/our_work')
       .sort_by('created_at', 'desc')
       .max_results(50)
       .execute();
 
-    if (!resources || resources.length === 0) {
-      return res.status(404).json({ success: false, message: 'No images found in our_work folder.' });
-    }
-
+    // ✅ Instead of returning a 404 error, return an empty array
     const imageUrls = resources.map(file => file.secure_url);
-    res.json(imageUrls);
+    
+    res.json(imageUrls.length > 0 ? imageUrls : []); // Return empty array if no images exist
   } catch (error) {
     console.error("🚨 Error Fetching Our Work Images:", error);
     res.status(500).json({ success: false, message: 'Error fetching images from Cloudinary.' });
