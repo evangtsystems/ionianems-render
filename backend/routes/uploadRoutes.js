@@ -57,35 +57,59 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-// ✅ 'Our Work' Image Upload Route
+/** ✅ 'Our Work' Image Upload Route **/
 router.post('/our-work', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'No file uploaded!' });
     }
 
-    console.log('✅ Our Work Image URL:', req.file.path);
+    // Cloudinary upload using stream
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.v2.uploader.upload_stream(
+        { folder: 'uploads/our_work' },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+      streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+    });
+
+    console.log('✅ Our Work Image URL:', result.secure_url);
 
     res.status(200).json({
       success: true,
       message: 'Our Work image uploaded successfully',
-      filePath: req.file.path, // ✅ Cloudinary URL
+      filePath: result.secure_url, // ✅ Return Cloudinary URL
     });
-
   } catch (error) {
     console.error("🚨 Error Uploading 'Our Work' Image:", error);
     res.status(500).json({ success: false, message: 'Error uploading image' });
   }
 });
 
-// ✅ Bulk Image Upload Route (Max 10 Images)
+/** ✅ Bulk Image Upload Route (Max 10 Images) **/
 router.post('/bulk-upload', upload.array('images', 10), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, message: 'No files uploaded!' });
     }
 
-    const uploadedImages = req.files.map(file => file.path); // ✅ Cloudinary URLs
+    const uploadedImages = await Promise.all(
+      req.files.map(async (file) => {
+        return new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.v2.uploader.upload_stream(
+            { folder: 'uploads' },
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result.secure_url);
+            }
+          );
+          streamifier.createReadStream(file.buffer).pipe(uploadStream);
+        });
+      })
+    );
 
     console.log('✅ Bulk Upload:', uploadedImages);
 
@@ -100,13 +124,14 @@ router.post('/bulk-upload', upload.array('images', 10), async (req, res) => {
   }
 });
 
-// ✅ Get All Uploaded Images (Stored in Cloudinary)
+/** ✅ Get All Uploaded Images (Stored in Cloudinary) **/
 router.get('/images', async (req, res) => {
   try {
-    const { resources } = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: 'uploads/', // Fetch images from 'uploads' folder
-    });
+    const { resources } = await cloudinary.v2.search
+      .expression('folder:uploads/')
+      .sort_by('created_at', 'desc')
+      .max_results(50)
+      .execute();
 
     const imageUrls = resources.map(file => file.secure_url);
     res.json(imageUrls);
@@ -116,13 +141,14 @@ router.get('/images', async (req, res) => {
   }
 });
 
-// ✅ Get All 'Our Work' Images
+/** ✅ Get All 'Our Work' Images **/
 router.get('/our-work/images', async (req, res) => {
   try {
-    const { resources } = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: 'uploads/our_work', // Fetch images from 'our_work' folder
-    });
+    const { resources } = await cloudinary.v2.search
+      .expression('folder:uploads/our_work')
+      .sort_by('created_at', 'desc')
+      .max_results(50)
+      .execute();
 
     const imageUrls = resources.map(file => file.secure_url);
     res.json(imageUrls);

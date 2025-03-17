@@ -26,16 +26,27 @@ const OurWork = () => {
   // Upload "Our Work" images to backend
   const handleImageUpload = async (event) => {
     if (!userInfo || !userInfo.isAdmin) return;
+  
     const file = event.target.files[0];
+    if (!file) return;
+  
     const formData = new FormData();
     formData.append('image', file);
+  
     try {
-      const { data } = await axios.post('/api/upload/our-work', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      setImages([...images, data.filePath]);
+      // 🟢 Send image to Cloudinary via backend
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL || "https://ionianems-backend.onrender.com"}/api/upload/our-work`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
+  
+      // 🟢 Update UI with new image URL from Cloudinary
+      setImages((prevImages) => [...prevImages, data.filePath]);
+      toast.success('✅ Image uploaded successfully!');
     } catch (error) {
       console.error('🚨 Upload failed:', error);
+      toast.error('❌ Upload failed, please try again.');
     }
   };
 
@@ -46,9 +57,14 @@ const OurWork = () => {
       
       {userInfo && userInfo.isAdmin && (
         <Form.Group controlId="imageUpload" className="mb-4">
-          <Form.Label className="fw-bold">{t('upload_photos')}</Form.Label>
-          <Form.Control type="file" accept="image/*" onChange={handleImageUpload} />
-        </Form.Group>
+        <Form.Label className="fw-bold">📸 Upload an Image</Form.Label>
+        <Form.Control
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          style={{ cursor: 'pointer' }}
+        />
+      </Form.Group>
       )}
 
       <Row className="mt-4 d-flex justify-content-center">
