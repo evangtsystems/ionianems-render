@@ -36,14 +36,15 @@ const upload = multer({ storage });
 const processImage = async (fileBuffer) => {
   try {
     return await sharp(fileBuffer)
-      .resize({ width: 1024, fit: 'inside' }) // Resize max width to 1024px
-      .toFormat('webp', { quality: 90 }) // Convert to WebP
+      .resize(1024, 768, { fit: 'cover', position: 'center' }) // ✅ Ensures fixed width & height
+      .toFormat('webp', { quality: 90 }) // ✅ Converts to WebP
       .toBuffer();
   } catch (error) {
     console.error("🚨 Error processing image:", error);
     throw new Error('Image processing failed');
   }
 };
+
 
 // ✅ Single Image Upload Route
 router.post('/', upload.single('image'), async (req, res) => {
