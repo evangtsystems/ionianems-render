@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Ping Render Backend
         run: |
-          RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" https://ionianems-backend.onrender.com/)
+          RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" https://ionianems-backend.onrender.com/ )
           if [ "$RESPONSE" -ne 200 ]; then
             echo "Backend might be down! Status code: $RESPONSE"
             exit 1
@@ -19,7 +19,7 @@ jobs:
 
       - name: Ping Render Frontend
         run: |
-          RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" https://ionianems-frontend.onrender.com/)
+          RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" https://ionianems-frontend.onrender.com/ )
           if [ "$RESPONSE" -ne 200 ]; then
             echo "Frontend might be down! Status code: $RESPONSE"
             exit 1
