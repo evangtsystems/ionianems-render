@@ -38,52 +38,43 @@ const Header = () => {
   return (
     <header style={{
       width: '100%',  
-      height: 'auto', // ✅ Adapts height based on content
+      height: '141px',  // ✅ Fixed height for consistency
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'stretch', // ✅ Ensures full height alignment
       backgroundColor: 'white',
-      flexWrap: 'wrap', // ✅ Allows items to wrap instead of overlapping
-    }}>
-    
-    
-      {/* ✅ Left Section - Background Image */}
-      <div style={{
-  backgroundImage: `url(${imageHeader})`,
-  backgroundSize: 'cover', // ✅ Ensures full coverage
-  backgroundPosition: 'center', // ✅ Keeps it centered on all screens
+      padding: '0',  // ✅ Fix: Added quotes around 0
+      margin: '0',  // ✅ Fix: Added quotes around 0
+      flexWrap: 'nowrap'  // ✅ Prevents wrapping
+}} >
+
+      
+      {/* ✅ Left Section - Background Image (Does NOT Shrink) */}
+<div className="header-image" style={{
+  backgroundImage: `url(${imageHeader})`, // ✅ Corrected template string syntax
+  backgroundSize: 'contain', // ✅ Ensures full image visibility without cropping
+  backgroundPosition: 'left center', // ✅ Keeps proper alignment
   backgroundRepeat: 'no-repeat',
-  height: '140px',
-  width: '27%', // ✅ Adjust width dynamically
-  minWidth: '200px', // ✅ Prevents shrinking too much on small screens
+  flexShrink: 0, // ✅ Prevents the image from shrinking
+  height: '140px', // ✅ Keeps height fixed
+  width: '500px' // ✅ Ensures it doesn't resize incorrectly
 }} />
 
-
-
-      {/* ✅ Right Section - Navbar (Expands to Fill Remaining Space) */}
-      <div style={{
-  flexGrow: 1, 
-  display: 'flex',
-  justifyContent: 'center',
-  minWidth: '250px', // ✅ Ensures navbar doesn’t shrink too much
-}}>
-
-<Navbar 
-  style={{
-    backgroundColor: '#283C79',
-    width: '100%',
-    height: '140px',
-    padding: '0 10px', // ✅ Adds space inside the navbar
-    overflow: 'hidden', // ✅ Prevents layout breaking
-  }}  
-  expand="lg" 
-  collapseOnSelect
->
-
-          <Container style={{
-  marginLeft: '-60px',  // ✅ Moves content inside the container more to the left
-  paddingLeft: '0px',   // ✅ Reduces extra padding on the left
-  maxWidth: '95%',      // ✅ Prevents Bootstrap from centering the content too much
-}}>
+    
+      {/* ✅ Right Section - Navbar (Shrinks Instead of Image) */}
+      <div className="navbar-wrapper" style={{
+        flexGrow: 1,  // ✅ Expands dynamically
+        display: 'flex',
+        justifyContent: 'flex-start',
+        minWidth: '300px',
+      }}>
+        <Navbar 
+          className="custom-navbar"
+          expand="lg" 
+          collapseOnSelect
+        >
+          <Container className="navbar-container">
+    
+    
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

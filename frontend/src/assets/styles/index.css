@@ -103,14 +103,135 @@ main {
   box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
+/* ✅ Locks Image Height & Prevents Shrinking */
+.header-image {
+  height: 140px !important;
+  width: auto !important;
+  min-width: 500px !important; /* ✅ Prevents image from shrinking */
+  flex-grow: 0 0 auto;
+  display: block !important;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  Object-fit: cover;
+  background-size: cover !important
+}
+
+/* ✅ Default Navbar - Takes Full Space */
+.custom-navbar {
+  background-color: #283C79;
+  width: 100%;
+  height: 140px; /* ✅ Matches image height */
+  padding: 0 144px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/* ✅ Shrinks Navbar (1656px - 1200px), Keeps Image Unchanged */
+@media (max-width: 1656px) and (min-width: 1200px) {
+  .custom-navbar {
+    width: 100% !important;  /* ✅ Navbar shrinks */
+    height: 140px !important; /* ✅ Keeps height fixed */
+    background-color: #283C79 !important; /* ✅ Forces color *
+  }
+
+  .navbar-container {
+    max-width: 70% !important; /* ✅ Prevents navbar from taking too much space */
+  }
+}
+
+/* ✅ Further Shrinks Navbar Below 1400px */
+@media (max-width: 1400px) {
+  .custom-navbar {
+    width: 100% !important; /* ✅ Navbar shrinks further */
+  }
+
+  .navbar-container {
+    max-width: 65% !important;
+  }
+}
+
+/* ✅ Navbar Adjustments for Medium Screens */
+@media (max-width: 1220px) {
+  .custom-navbar {
+    width: 100% !important;
+  }
+}
+
+/* ✅ Mobile Adjustments */
+@media (max-width: 1200px) {
   header {
-    flex-direction: column; /* ✅ Stacks the navbar below the image */
+    flex-direction: column;
     height: auto;
   }
 
-  .navbar {
+  .custom-navbar {
     width: 100%;
     text-align: center;
+    height: auto; /* ✅ Allows navbar to adjust for mobile */
+  }
+
+  .navbar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
+
+
+@media (max-width: 1200px) and (min-width: 500px) {
+  .header-image {
+    width: 100% !important; /* ✅ Stretches fully */
+    height: 140px !important; /* ✅ Keeps height fixed */
+    background-size: contain !important; /* ✅ Fills full width while maintaining aspect ratio */
+    background-position: center !important;
+    background-repeat: no-repeat;
+    object-fit: cover !important; /* ✅ Prevents distortion */
+  }
+}
+
+
+
+/* ✅ Navbar Fix for 1000px - 1200px */
+@media (max-width: 1200px) and (min-width: 992px) {
+  .navbar-nav {
+    display: flex;
+    justify-content: center; /* ✅ Centers items */
+    flex-wrap: nowrap; /* ✅ Prevents items from breaking into 2 rows */
+    gap: 10px; /* ✅ Adds space between items */
+    
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 14px !important; /* ✅ Prevents wrapping */
+    padding: 8px 10px !important; /* ✅ Reduces excessive padding */
+    flex: 1 1 auto !important;
+  }
+
+  .custom-navbar {
+    width: 100% !important; /* ✅ Makes navbar fill the space */
+    max-width: 100% !important; /* ✅ Prevents it from shrinking too much */
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: center;
+    width: 100% !important;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .custom-navbar {
+    margin-top: 2px !important; /* ✅ Adds spacing between image and navbar */
+    
+  }
+
+  .header-image {
+    margin-bottom: 2px !important; /* ✅ Ensures spacing below the image */
+  }
+}
+
