@@ -72,7 +72,7 @@ const Header = () => {
             backgroundColor: '#283C79', // ✅ Custom color
             width: '100%', // ✅ Ensures full use of the right-side space
             height:'140px',
-            right:'8px'
+            right:'10px'
           }}  
           expand="lg" 
           collapseOnSelect
