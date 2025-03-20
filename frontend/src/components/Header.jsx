@@ -39,20 +39,27 @@ const Header = () => {
     <header style={{
       width: '100vw',  
       height: '140px', 
-      display: 'flex', // ✅ Enables Flexbox
-      alignItems: 'center', // ✅ Aligns items vertically
-      backgroundColor: 'white', // ✅ Ensures the header background is visible
+      display: 'flex',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      margin: '0',  // ✅ Ensures no extra margins
+      padding: '0',  // ✅ Prevents spacing issues
+      border: 'none',  // ✅ Removes any unexpected borders
     }}>
-
+    
       {/* ✅ Left Section - Background Image */}
       <div style={{
-        backgroundImage: `url(${imageHeader})`,
-        backgroundSize: 'contain', // ✅ Ensures the full image is visible
-        backgroundPosition: 'left',
-        backgroundRepeat: 'no-repeat',
-        height: '140px',
-        width: '27%', // ✅ Controls how much space the image takes
-      }} />
+  backgroundImage: `url(${imageHeader})`,
+  backgroundSize: 'contain',
+  backgroundPosition: 'left',
+  backgroundRepeat: 'no-repeat',
+  height: '140px',
+  width: '27%',
+  margin: '0',  // ✅ Ensures no extra spacing
+  padding: '0',  // ✅ Removes any extra space added by Render
+  display: 'block', // ✅ Ensures correct rendering
+}} />
+
 
       {/* ✅ Right Section - Navbar (Expands to Fill Remaining Space) */}
       <div style={{

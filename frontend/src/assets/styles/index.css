@@ -96,3 +96,9 @@ main {
 .custom-search-btn:hover {
   background-color: #e6c34a !important; /* Darker shade on hover */
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
