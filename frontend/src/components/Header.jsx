@@ -37,48 +37,48 @@ const Header = () => {
 
   return (
     <header style={{
-      width: '100vw',  
-      height: '140px', 
+      width: '100%',  
+      height: 'auto', // ✅ Adapts height based on content
       display: 'flex',
       alignItems: 'center',
       backgroundColor: 'white',
-      margin: '0',  // ✅ Ensures no extra margins
-      padding: '0',  // ✅ Prevents spacing issues
-      border: 'none',  // ✅ Removes any unexpected borders
+      flexWrap: 'wrap', // ✅ Allows items to wrap instead of overlapping
     }}>
+    
     
       {/* ✅ Left Section - Background Image */}
       <div style={{
   backgroundImage: `url(${imageHeader})`,
-  backgroundSize: 'contain',
-  backgroundPosition: 'left',
+  backgroundSize: 'cover', // ✅ Ensures full coverage
+  backgroundPosition: 'center', // ✅ Keeps it centered on all screens
   backgroundRepeat: 'no-repeat',
   height: '140px',
-  width: '27%',
-  margin: '0',  // ✅ Ensures no extra spacing
-  padding: '0',  // ✅ Removes any extra space added by Render
-  display: 'block', // ✅ Ensures correct rendering
+  width: '27%', // ✅ Adjust width dynamically
+  minWidth: '200px', // ✅ Prevents shrinking too much on small screens
 }} />
+
 
 
       {/* ✅ Right Section - Navbar (Expands to Fill Remaining Space) */}
       <div style={{
-        flexGrow: 1, // ✅ Makes the navbar take up remaining space
-        display: 'flex', // ✅ Ensures correct alignment
-        justifyContent: 'center', // ✅ Centers navbar contents
-      }}>
-        <Navbar 
-          style={{
-            backgroundColor: '#283C79', // ✅ Custom color
-            width: '100%', // ✅ Ensures full use of the right-side space
-            height:'140px',
-            right:'10px'
-          }}  
-          expand="lg" 
-          collapseOnSelect
+  flexGrow: 1, 
+  display: 'flex',
+  justifyContent: 'center',
+  minWidth: '250px', // ✅ Ensures navbar doesn’t shrink too much
+}}>
 
-          
-        >
+<Navbar 
+  style={{
+    backgroundColor: '#283C79',
+    width: '100%',
+    height: '140px',
+    padding: '0 10px', // ✅ Adds space inside the navbar
+    overflow: 'hidden', // ✅ Prevents layout breaking
+  }}  
+  expand="lg" 
+  collapseOnSelect
+>
+
           <Container style={{
   marginLeft: '-60px',  // ✅ Moves content inside the container more to the left
   paddingLeft: '0px',   // ✅ Reduces extra padding on the left
