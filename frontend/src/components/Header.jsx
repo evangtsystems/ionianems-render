@@ -48,16 +48,20 @@ const Header = () => {
 }} >
 
       
-      {/* ✅ Left Section - Background Image (Does NOT Shrink) */}
-<div className="header-image" style={{
-  backgroundImage: `url(${imageHeader})`, // ✅ Corrected template string syntax
-  backgroundSize: 'contain', // ✅ Ensures full image visibility without cropping
-  backgroundPosition: 'left center', // ✅ Keeps proper alignment
-  backgroundRepeat: 'no-repeat',
-  flexShrink: 0, // ✅ Prevents the image from shrinking
-  height: '140px', // ✅ Keeps height fixed
-  width: '500px' // ✅ Ensures it doesn't resize incorrectly
-}} />
+    {/* ✅ Left Section - Clickable Background Image */}
+<Link to="/" style={{ textDecoration: 'none' }}>
+  <div className="header-image" style={{
+    backgroundImage: `url(${imageHeader})`,
+    backgroundSize: 'contain',
+    backgroundPosition: 'left center',
+    backgroundRepeat: 'no-repeat',
+    flexShrink: 0,
+    height: '140px',
+    width: '500px',
+    cursor: 'pointer' // ✅ Adds a pointer cursor to indicate clickability
+  }} />
+</Link>
+
 
     
       {/* ✅ Right Section - Navbar (Shrinks Instead of Image) */}
