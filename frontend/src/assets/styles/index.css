@@ -280,11 +280,23 @@ main {
   }
 }
 
-@media (max-width: 768px) {
+
+
+@media (max-width: 500px) {
   .header-image {
     width: 100% !important;
-    height: 140px !important;
-    max-width: none !important;
+    height: auto !important;
+    min-height: 120px !important; /* keeps height visible but not cut */
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    aspect-ratio: unset !important;
+  }
+}
+@media (max-width: 500px) {
+  header {
+    flex-direction: column;
+    height: auto !important;
   }
 }
 
