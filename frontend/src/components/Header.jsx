@@ -97,9 +97,7 @@ useEffect(() => {
     
 
       
-    {/* ✅ Left Section - Clickable Background Image */}
-{/* ✅ Left Section - Clickable Background Image */}
-<Link to="/" style={{ textDecoration: 'none' }}>
+    <Link to="/" style={{ textDecoration: 'none' }}>
   <div
     className="header-image"
     style={{
@@ -109,11 +107,12 @@ useEffect(() => {
       backgroundRepeat: 'no-repeat',
       flexShrink: 0,
       height: '140px',
-      width: '500px',
+      width: 'auto',
       cursor: 'pointer'
     }}
-  />
+  ></div>
 </Link>
+
 
 
 

@@ -127,7 +127,7 @@ main {
 .header-image {
   height: 140px !important;
   min-width: 500px !important;
-  width: 500px !important;
+  width: 100% !important;
   display: block !important;
   background-size: cover !important;
   background-position: left center !important;
@@ -280,8 +280,11 @@ main {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
   .header-image {
-    aspect-ratio: 2.5 / 1; /* Slightly taller if needed */
+    width: 100% !important;
+    height: 140px !important;
+    max-width: none !important;
   }
 }
+
