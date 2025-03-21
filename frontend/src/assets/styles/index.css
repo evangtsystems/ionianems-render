@@ -227,10 +227,12 @@ main {
 
   .header-image {
     width: 100% !important;
+    min-width: unset !important;
     height: 140px !important;
+    aspect-ratio: 3 / 1; /* Adjust depending on your image shape */
     background-size: contain !important;
-    background-position: center !important;
-    object-fit: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
   }
 }
 
@@ -278,3 +280,8 @@ main {
   }
 }
 
+@media (max-width: 500px) {
+  .header-image {
+    aspect-ratio: 2.5 / 1; /* Slightly taller if needed */
+  }
+}
