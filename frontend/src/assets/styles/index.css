@@ -2,16 +2,17 @@
 
 /* index.css */
 
-* {
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  transform: translateZ(0); /* Forces GPU repaint */
-  background-color: white;
+* {
+  box-sizing: inherit;
 }
+
 
 
 /* ...rest of your styles... */
@@ -126,7 +127,7 @@ main {
 /* ✅ Locks Header Image Dimensions & Behavior */
 .header-image {
   height: 140px !important;
-  min-width: 500px !important;
+  min-width: 500px ;
   width: 100% !important;
   display: block !important;
   background-size: cover !important;
@@ -285,18 +286,22 @@ main {
 @media (max-width: 500px) {
   .header-image {
     width: 100% !important;
-    height: auto !important;
-    min-height: 120px !important; /* keeps height visible but not cut */
+    height: 105px !important;
     background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
-    aspect-ratio: unset !important;
-  }
-}
-@media (max-width: 500px) {
-  header {
-    flex-direction: column;
-    height: auto !important;
+    min-width: unset !important;
   }
 }
 
+
+@media (max-width: 500px) {
+  .header-image,
+  .custom-navbar,
+  .navbar-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+  }
+}
