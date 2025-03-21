@@ -7,6 +7,7 @@ import { useLogoutMutation } from '../slices/usersApiSlice';
 import { logout } from '../slices/authSlice';
 import { resetCart } from '../slices/cartSlice';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 import SearchBox from './SearchBox';
 import LanguageSwitcher from '../components/LanguageSwitcher';
@@ -35,32 +36,85 @@ const Header = () => {
     }
   };
 
+  
+
+useEffect(() => {
+  let prevHeight = window.innerHeight;
+
+  const triggerManualRepaint = () => {
+    // Force a scroll nudge
+    window.scrollBy(0, 1);
+    window.scrollBy(0, -1);
+
+    // Create and dispatch a real click
+    const evt = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+    });
+
+    // Dispatch the event on body
+    document.body.dispatchEvent(evt);
+    console.log('[💥 Repaint forced by synthetic click]');
+  };
+
+  const handleResize = () => {
+    const currentHeight = window.innerHeight;
+
+    // Detect significant height change (DevTools open/close)
+    if (Math.abs(currentHeight - prevHeight) > 50) {
+      requestAnimationFrame(() => {
+        triggerManualRepaint();
+      });
+    }
+
+    prevHeight = currentHeight;
+  };
+
+  window.addEventListener('resize', handleResize);
+
+  return () => {
+    window.removeEventListener('resize', handleResize);
+  };
+}, []);
+
+  
   return (
     <header style={{
-      width: '100%',  
-      height: '141px',  // ✅ Fixed height for consistency
+      width: '100%',
+      height: '141px',
       display: 'flex',
-      alignItems: 'stretch', // ✅ Ensures full height alignment
+      alignItems: 'stretch',
       backgroundColor: 'white',
-      padding: '0',  // ✅ Fix: Added quotes around 0
-      margin: '0',  // ✅ Fix: Added quotes around 0
-      flexWrap: 'nowrap'  // ✅ Prevents wrapping
-}} >
+      padding: '0',
+      margin: '0',
+      flexWrap: 'nowrap',
+      border: 'none',
+      gap: 0,
+      position: 'relative',
+      zIndex: 1
+    }}>
+    
 
       
     {/* ✅ Left Section - Clickable Background Image */}
+{/* ✅ Left Section - Clickable Background Image */}
 <Link to="/" style={{ textDecoration: 'none' }}>
-  <div className="header-image" style={{
-    backgroundImage: `url(${imageHeader})`,
-    backgroundSize: 'contain',
-    backgroundPosition: 'left center',
-    backgroundRepeat: 'no-repeat',
-    flexShrink: 0,
-    height: '140px',
-    width: '500px',
-    cursor: 'pointer' // ✅ Adds a pointer cursor to indicate clickability
-  }} />
+  <div
+    className="header-image"
+    style={{
+      backgroundImage: `url(${imageHeader})`,
+      backgroundSize: 'contain',
+      backgroundPosition: 'left center',
+      backgroundRepeat: 'no-repeat',
+      flexShrink: 0,
+      height: '140px',
+      width: '500px',
+      cursor: 'pointer'
+    }}
+  />
 </Link>
+
 
 
     
@@ -71,11 +125,12 @@ const Header = () => {
         justifyContent: 'flex-start',
         minWidth: '300px',
       }}>
-        <Navbar 
-          className="custom-navbar"
-          expand="lg" 
-          collapseOnSelect
-        >
+        <Navbar expand="md" className="custom-navbar" collapseOnSelect>
+
+
+
+          
+        
           <Container className="navbar-container">
     
     

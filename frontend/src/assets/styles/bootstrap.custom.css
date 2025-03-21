@@ -4,6 +4,15 @@
  * Copyright 2011-2022 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+ /* index.css */
+
+html, body {
+  transform: translateZ(0); /* Forces GPU to repaint */
+}
+
+/* ...rest of your styles... */
+
 :root,
 [data-bs-theme='light'] {
   --bs-blue: #3c4c5d;
