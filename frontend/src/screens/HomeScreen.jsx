@@ -8,6 +8,8 @@ import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import Meta from '../components/Meta';
 import { useState, useEffect } from 'react';
+import { Carousel } from 'react-bootstrap';
+
 
 const categories = ['All', 'Αντλίες Σκαφών', 'Υποβρύχιος Φωτισμός', 'Όργανα Ελέγχου', 'Υαλοκαθαριστήρες Σκαφών', 'Συστήματα Πλοήγησης', 'Alternator Regulator', 'Όργανα Ελέγχου και Αυτοματισμού',
   'Έξυπνο Σύστημα Πρόληψης Συγκρούσεων', 'Συστήματα Ελέγχου', 'Ηλεκτρολογικό Υλικό Σκαφών', 'Ηλεκτρικός Εξοπλισμός', 'Φορτιστές Μπαταριών', 'Συστήματα Αυτοματισμού', 'Marine Generator'
@@ -68,17 +70,106 @@ const HomeScreen = () => {
 
       {/* Replacing Carousel with an Image */}
       {!keyword ? (
-        <Container className="text-center">
-          <img 
-            src="/images/first_extracted_image.jpg" 
-            alt="Banner" 
-            className="img-fluid rounded" 
-            style={{ maxWidth: '100%', height: 'auto' }}
-          />
-        </Container>
-      ) : (
-        <Link to="/" className="btn btn-light mb-4">Go Back</Link>
-      )}
+  <>
+    <Container className="text-center my-4">
+      <img 
+        src="/images/first_extracted_image.jpg" 
+        alt="Banner" 
+        className="img-fluid rounded shadow-sm" 
+        style={{ maxWidth: '100%', height: 'auto' }}
+      />
+    </Container>
+
+    <Container
+      fluid
+      className="py-5 px-3 my-4 text-center"
+      style={{
+        backgroundColor: '#4a66a3',
+        color: '#fff',
+        borderRadius: '12px'
+      }}
+    >
+      <h2 className="mb-3" style={{ fontWeight: 700 }}>
+        ⚡️ Powering Yachts Across the Ionian – Fast, Expert, Unmatched
+      </h2>
+      <p
+        style={{
+          fontSize: '1.1rem',
+          maxWidth: '800px',
+          margin: '0 auto',
+          lineHeight: '1.8'
+        }}
+      >
+        <strong>Electrical Marine Services (EMS)</strong>, based in Corfu, has been a trusted force in marine electrics for over 15 years.
+        We deliver high-performance electrical installations, precision upgrades, and on-demand emergency support for yachts and pleasure boats across Greece and Albania.
+        <br /><br />
+        Whether you're docked in port or adrift at sea, EMS brings expert service to your vessel — anywhere in the Ionian, within 2 hours.
+        Count on us to keep your journey safe, smooth, and powered with absolute confidence.
+      </p>
+    </Container>
+  </>
+) : (
+  <Link to="/" className="btn btn-light mb-4">Go Back</Link>
+)}
+
+<Container className="my-5">
+  <h3 className="text-center mb-4" style={{ color: '#283C79', fontWeight: 'bold' }}>
+    Our Trusted Partners
+  </h3>
+  <Carousel
+    indicators={false}
+    controls={false}
+    interval={3000}
+    pause={false}
+    className="partner-carousel"
+    style={{ backgroundColor: '#ffc0d1' }} // 👈 Fix here
+  >
+    {[
+      { src: "/images/victron-energy-b-v-seeklogo.png", alt: 'Victron Energy' },
+      { src: '/images/yanmar-seeklogo.png', alt: 'Yanmar Engine' },
+      { src: '/images/zeus-logo.png', alt: 'Zeus' },
+      { src: '/images/bluefin-led-logo.png', alt: 'Bluefin LED'},
+      { src: '/images/logo_feit_white.png', alt: 'Feit Electric' }, // white text
+    ].map((partner, index) => {
+      const isWhiteTextLogo = partner.alt === 'Feit Electric';
+
+      return (
+        <Carousel.Item key={index}>
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: '150px' }}
+          >
+            <div
+              style={{
+                width: '60vw',                 // Responsive width
+                maxWidth: '220px',             // Prevents it from being too wide
+                height: '100px',
+                backgroundColor: isWhiteTextLogo ? '#1a1a1a' : 'white',
+                padding: '10px',
+                borderRadius: '8px',
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <img
+                src={partner.src}
+                alt={partner.alt}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'contain'
+                }}
+              />
+            </div>
+          </div>
+        </Carousel.Item>
+      );
+    })}
+  </Carousel>
+</Container>
+
 
       {isLoading ? (
         <Loader />
@@ -87,6 +178,9 @@ const HomeScreen = () => {
       ) : (
         <>
           <Meta />
+
+          
+
           <h1>Latest Products</h1>
           <Row>
             {data.products.map((product) => (
