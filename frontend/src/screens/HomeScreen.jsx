@@ -10,24 +10,28 @@ import Meta from '../components/Meta';
 import { useState, useEffect } from 'react';
 import { Carousel } from 'react-bootstrap';
 
-const smartGroupLogos = (logos, perSlide = 3) => {
+
+
+const groupLogosSmart = (logos, perSlide) => {
   const groups = [];
 
-  // Add first full group
-  if (logos.length <= perSlide) {
-    groups.push(logos);
-  } else {
-    groups.push(logos.slice(0, perSlide));
+  for (let i = 0; i < logos.length; i += perSlide) {
+    const group = logos.slice(i, i + perSlide);
 
-    const remaining = logos.length - perSlide;
-    if (remaining > 0) {
-      const lastGroup = logos.slice(perSlide - 2); // take 2 from previous + rest
-      groups.push(lastGroup);
+    if (group.length < perSlide && groups.length > 0) {
+      // fill the last group using previous ones
+      const needed = perSlide - group.length;
+      const fromPrev = groups[groups.length - 1].slice(-needed);
+      groups.push([...fromPrev, ...group]);
+    } else {
+      groups.push(group);
     }
   }
 
   return groups;
+  
 };
+
 
 
 
@@ -39,6 +43,17 @@ const categories = ['All', 'Αντλίες Σκαφών', 'Υποβρύχιος 
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
   const navigate = useNavigate();
+  const [perSlide, setPerSlide] = useState(3); // ✅ Moved inside component
+
+  useEffect(() => {
+    const updatePerSlide = () => {
+      setPerSlide(window.innerWidth < 576 ? 2 : 3); // ✅ Responsive setup
+    };
+
+    updatePerSlide();
+    window.addEventListener('resize', updatePerSlide);
+    return () => window.removeEventListener('resize', updatePerSlide);
+  }, []);
 
   const searchParams = new URLSearchParams(window.location.search);
   const categoryFromURL = searchParams.get("category") || "";
@@ -138,19 +153,13 @@ const HomeScreen = () => {
     Our Trusted Partners
   </h3>
 
-  <Carousel
-  indicators={false}
-  controls={true}
-  interval={3000}
-  pause={false}
-  className="partner-carousel"
->
-  {smartGroupLogos([
+  <Carousel indicators={false} controls={true} interval={3000} pause={false}>
+  {groupLogosSmart([
     { src: "/images/victron-energy-b-v-seeklogo.png", alt: 'Victron Energy' },
     { src: '/images/yanmar-seeklogo.png', alt: 'Yanmar Engine' },
     { src: '/images/zeus-logo.png', alt: 'Zeus' },
     { src: '/images/logo_feit_white.png', alt: 'Feit Electric' },
-  ]).map((group, slideIndex) => (
+  ], perSlide).map((group, slideIndex) => (
     <Carousel.Item key={slideIndex}>
       <div className="d-flex justify-content-center gap-4 align-items-center" style={{ height: '180px' }}>
         {group.map((partner, index) => {
@@ -159,8 +168,8 @@ const HomeScreen = () => {
             <div
               key={index}
               style={{
-                width: '180px',
-                height: '120px',
+                width: '140px',
+                height: '100px',
                 backgroundColor: isWhiteTextLogo ? '#1a1a1a' : 'white',
                 padding: '10px',
                 borderRadius: '8px',
