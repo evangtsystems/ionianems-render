@@ -1,21 +1,15 @@
 
 
-/* index.css */
-
-html, body {
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow-x: hidden;
+* {
   box-sizing: border-box;
 }
 
-* {
-  box-sizing: inherit;
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-
-
-/* ...rest of your styles... */
 
 
 
@@ -144,17 +138,7 @@ main {
   position: relative;
 }
 
-.header-image::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: white; /* Match your header or page background */
-  pointer-events: none;
-  z-index: 2;
-}
+
 
 
 
@@ -262,11 +246,11 @@ main {
 /* ✅ Below 992px: Mobile-Like Spacing */
 @media (max-width: 992px) {
   .custom-navbar {
-    margin-top: 2px !important;
+    margin-top: 0px !important;
   }
 
   .header-image {
-    margin-bottom: 2px !important;
+    margin-bottom: 0px !important;
   }
 }
 
@@ -291,7 +275,7 @@ main {
     background-position: center center !important;
     background-repeat: no-repeat !important;
     min-width: unset !important;
-    margin-bottom: 2px !important;
+    margin-bottom: 0px !important;
   }
 }
 
