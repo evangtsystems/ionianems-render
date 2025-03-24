@@ -247,11 +247,17 @@ main {
 @media (max-width: 992px) {
   .custom-navbar {
     margin-top: 0px !important;
+   
+
   }
 
   .header-image {
     margin-bottom: 0px !important;
   }
+}
+
+.navbar-toggler {
+  margin-top: 10px; /* optional tweak */
 }
 
 /* ✅ Expand Navbar Above 1312px (Helper) */
@@ -283,6 +289,7 @@ main {
 @media (max-width: 500px) {
   .custom-navbar {
  margin-top: 0 !important; /* or 2px/4px if you want more space */
+ 
 
     display: flex !important;
     justify-content: center !important;
@@ -299,6 +306,7 @@ main {
   padding: 6px 10px;
   background-color: transparent;   /* optional for contrast */
   transition: all 0.2s ease-in-out;
+  top: -2px !important;
  
 }
 
@@ -326,3 +334,5 @@ main {
   background-position: center;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
 }
+
+
