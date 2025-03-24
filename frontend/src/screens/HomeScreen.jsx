@@ -10,6 +10,27 @@ import Meta from '../components/Meta';
 import { useState, useEffect } from 'react';
 import { Carousel } from 'react-bootstrap';
 
+const smartGroupLogos = (logos, perSlide = 3) => {
+  const groups = [];
+
+  // Add first full group
+  if (logos.length <= perSlide) {
+    groups.push(logos);
+  } else {
+    groups.push(logos.slice(0, perSlide));
+
+    const remaining = logos.length - perSlide;
+    if (remaining > 0) {
+      const lastGroup = logos.slice(perSlide - 2); // take 2 from previous + rest
+      groups.push(lastGroup);
+    }
+  }
+
+  return groups;
+};
+
+
+
 
 const categories = ['All', 'Αντλίες Σκαφών', 'Υποβρύχιος Φωτισμός', 'Όργανα Ελέγχου', 'Υαλοκαθαριστήρες Σκαφών', 'Συστήματα Πλοήγησης', 'Alternator Regulator', 'Όργανα Ελέγχου και Αυτοματισμού',
   'Έξυπνο Σύστημα Πρόληψης Συγκρούσεων', 'Συστήματα Ελέγχου', 'Ηλεκτρολογικό Υλικό Σκαφών', 'Ηλεκτρικός Εξοπλισμός', 'Φορτιστές Μπαταριών', 'Συστήματα Αυτοματισμού', 'Marine Generator'
@@ -72,13 +93,13 @@ const HomeScreen = () => {
       {!keyword ? (
   <>
     <Container className="text-center my-4">
-      <img 
-        src="/images/first_extracted_image.jpg" 
-        alt="Banner" 
-        className="img-fluid rounded shadow-sm" 
-        style={{ maxWidth: '100%', height: 'auto' }}
-      />
-    </Container>
+  <img
+    src="/images/first_extracted_image.jpg"
+    alt="Banner"
+    className=" hero-banner"
+  />
+</Container>
+
 
     <Container
       fluid
@@ -116,34 +137,30 @@ const HomeScreen = () => {
   <h3 className="text-center mb-4" style={{ color: '#283C79', fontWeight: 'bold' }}>
     Our Trusted Partners
   </h3>
-  <Carousel
-    indicators={false}
-    controls={false}
-    interval={3000}
-    pause={false}
-    className="partner-carousel"
-    style={{ backgroundColor: '#ffc0d1' }} // 👈 Fix here
-  >
-    {[
-      { src: "/images/victron-energy-b-v-seeklogo.png", alt: 'Victron Energy' },
-      { src: '/images/yanmar-seeklogo.png', alt: 'Yanmar Engine' },
-      { src: '/images/zeus-logo.png', alt: 'Zeus' },
-      { src: '/images/bluefin-led-logo.png', alt: 'Bluefin LED'},
-      { src: '/images/logo_feit_white.png', alt: 'Feit Electric' }, // white text
-    ].map((partner, index) => {
-      const isWhiteTextLogo = partner.alt === 'Feit Electric';
 
-      return (
-        <Carousel.Item key={index}>
-          <div
-            className="d-flex justify-content-center align-items-center"
-            style={{ height: '150px' }}
-          >
+  <Carousel
+  indicators={false}
+  controls={true}
+  interval={3000}
+  pause={false}
+  className="partner-carousel"
+>
+  {smartGroupLogos([
+    { src: "/images/victron-energy-b-v-seeklogo.png", alt: 'Victron Energy' },
+    { src: '/images/yanmar-seeklogo.png', alt: 'Yanmar Engine' },
+    { src: '/images/zeus-logo.png', alt: 'Zeus' },
+    { src: '/images/logo_feit_white.png', alt: 'Feit Electric' },
+  ]).map((group, slideIndex) => (
+    <Carousel.Item key={slideIndex}>
+      <div className="d-flex justify-content-center gap-4 align-items-center" style={{ height: '180px' }}>
+        {group.map((partner, index) => {
+          const isWhiteTextLogo = partner.alt === 'Feit Electric';
+          return (
             <div
+              key={index}
               style={{
-                width: '60vw',                 // Responsive width
-                maxWidth: '220px',             // Prevents it from being too wide
-                height: '100px',
+                width: '180px',
+                height: '120px',
                 backgroundColor: isWhiteTextLogo ? '#1a1a1a' : 'white',
                 padding: '10px',
                 borderRadius: '8px',
@@ -163,12 +180,14 @@ const HomeScreen = () => {
                 }}
               />
             </div>
-          </div>
-        </Carousel.Item>
-      );
-    })}
-  </Carousel>
+          );
+        })}
+      </div>
+    </Carousel.Item>
+  ))}
+</Carousel>
 </Container>
+
 
 
       {isLoading ? (

@@ -336,3 +336,28 @@ main {
 }
 
 
+.hero-banner-wrapper {
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center by default for mobile */
+  background-color: #fff;
+}
+
+.hero-banner {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* On desktop: align image to the left */
+@media (min-width: 992px) {
+  .hero-banner-wrapper {
+    justify-content: flex-start;
+    padding-left: 5vw; /* Optional: Add space from the edge */
+  }
+}
