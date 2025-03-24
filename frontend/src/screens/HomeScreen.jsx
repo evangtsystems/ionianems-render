@@ -199,6 +199,12 @@ const HomeScreen = () => {
 
 
 
+
+
+
+
+
+
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -218,10 +224,58 @@ const HomeScreen = () => {
             ))}
           </Row>
           <Paginate pages={data.pages} page={data.page} keyword={keyword || ''} />
+
+
+          <Container className="my-5">
+  <h3 className="text-center mb-4" style={{ color: '#283C79', fontWeight: 'bold' }}>
+    Electrical Marine Services – Corfu Location
+  </h3>
+
+  <Row className="align-items-center">
+    <Col md={7} className="mb-4 mb-md-0">
+      <div className="d-flex justify-content-center">
+        <iframe
+          title="EMS Corfu Location"
+          src="https://www.google.com/maps?q=39.645001742961725,19.851914724030458&z=18&output=embed"
+          width="100%"
+          height="450"
+          style={{
+            border: 0,
+            borderRadius: '12px',
+            width: '100%',
+          }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </Col>
+
+    <Col md={5}>
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        borderRadius: '12px',
+        padding: '20px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+      }}>
+        <h5 style={{ color: '#283C79', fontWeight: 'bold' }}>Contact Info</h5>
+        <p className="mb-1"><strong>Address:</strong> Gouvia Marina, Corfu, Greece</p>
+        <p className="mb-1"><strong>Phone:</strong> <a href="tel:+302661401219" style={{ color: '#283C79' }}>+30 2661401219</a></p>
+        <p className="mb-1"><strong>Email:</strong> <a href="mailto:info@ionianems.com" style={{ color: '#283C79' }}>info@ionianems.com</a></p>
+        <p className="mb-0"><strong>Hours:</strong> Mon–Sat: 9:00–18:00</p>
+      </div>
+    </Col>
+  </Row>
+</Container>
+
         </>
       )}
     </>
   );
 };
+
+
+
+
 
 export default HomeScreen;
