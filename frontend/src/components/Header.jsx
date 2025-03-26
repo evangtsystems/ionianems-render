@@ -184,14 +184,16 @@ useEffect(() => {
                   </Nav.Link>
                 )}
 
-                {userInfo && userInfo.isAdmin && (
-                  <NavDropdown title={<span>{t('admin_panel')}</span>} id="adminmenu">
-                    <NavDropdown.Item as={Link} to="/admin/productlist">{t('products')}</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/admin/orderlist">{t('orders')}</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/admin/userlist">{t('users')}</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/admin/bulk-upload">{t('bulk_upload')}</NavDropdown.Item>
-                  </NavDropdown>
-                )}
+{userInfo && userInfo.isAdmin && (
+  <NavDropdown title={<span style={{ color: '#ffdd57' }}>{t('admin_panel')}</span>} id="adminmenu">
+    <NavDropdown.Item as={Link} to="/admin/productlist">{t('products')}</NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/admin/orderlist">{t('orders')}</NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/admin/userlist">{t('users')}</NavDropdown.Item>
+    {/* <NavDropdown.Item as={Link} to="/admin/bulk-upload">{t('bulk_upload')}</NavDropdown.Item> */}
+  </NavDropdown>
+)}
+
+
               </Nav>
             </Navbar.Collapse>
           </Container>
