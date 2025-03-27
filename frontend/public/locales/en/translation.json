@@ -22,7 +22,12 @@
     "sign_in": "Sign In",
     "admin_panel": "Admin Panel",
     "orders": "Orders",
-    "users": "Users"
+    "users": "Users",
+     "authorized_reseller": "Authorized Reseller",
+    "authorized_reseller_info": "Our company is an authorized reseller of three top manufacturers.\nThe names of the companies will be announced soon.",
+    "slogan_line": "Powering Yachts Across the Ionian – Fast, Expert, Unmatched",
+"slogan_paragraph": "Electrical Marine Services (EMS), based in Corfu, has been a trusted force in marine electrics for over 15 years. We deliver high-performance electrical installations, precision upgrades, and on-demand emergency support for yachts and pleasure boats across Greece and Albania.\n\nWhether you're docked in port or adrift at sea, EMS brings expert service to your vessel — anywhere in the Ionian, within 2 hours. Count on us to keep your journey safe, smooth, and powered with absolute confidence."
+
   }
   
   

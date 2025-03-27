@@ -9,6 +9,8 @@ import Paginate from '../components/Paginate';
 import Meta from '../components/Meta';
 import { useState, useEffect } from 'react';
 import { Carousel } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next'; // for CRA, not next-i18next
+
 
 
 
@@ -58,6 +60,7 @@ const HomeScreen = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const categoryFromURL = searchParams.get("category") || "";
   const [selectedCategory, setSelectedCategory] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     setSelectedCategory(categoryFromURL);
@@ -84,6 +87,7 @@ const HomeScreen = () => {
       queryParams.delete("category");
     }
     navigate(`/?${queryParams.toString()}`, { replace: true });
+
   };
 
   return (
@@ -116,37 +120,64 @@ const HomeScreen = () => {
 </Container>
 
 
-    <Container
-      fluid
-      className="py-5 px-3 my-4 text-center"
-      style={{
-        backgroundColor: '#4a66a3',
-        color: '#fff',
-        borderRadius: '12px'
-      }}
-    >
-      <h2 className="mb-3" style={{ fontWeight: 700 }}>
-        ⚡️ Powering Yachts Across the Ionian – Fast, Expert, Unmatched
-      </h2>
-      <p
-        style={{
-          fontSize: '1.1rem',
-          maxWidth: '800px',
-          margin: '0 auto',
-          lineHeight: '1.8'
-        }}
-      >
-        <strong>Electrical Marine Services (EMS)</strong>, based in Corfu, has been a trusted force in marine electrics for over 15 years.
-        We deliver high-performance electrical installations, precision upgrades, and on-demand emergency support for yachts and pleasure boats across Greece and Albania.
-        <br /><br />
-        Whether you're docked in port or adrift at sea, EMS brings expert service to your vessel — anywhere in the Ionian, within 2 hours.
-        Count on us to keep your journey safe, smooth, and powered with absolute confidence.
-      </p>
-    </Container>
+<Container
+  fluid
+  className="py-5 px-3 my-4 text-center"
+  style={{
+    backgroundColor: '#4a66a3',
+    color: '#fff',
+    borderRadius: '12px'
+  }}
+>
+  <h2 className="mb-3" style={{ fontWeight: 700 }}>
+    ⚡️ {t('slogan_line')}
+  </h2>
+  <p
+    style={{
+      fontSize: '1.1rem',
+      maxWidth: '800px',
+      margin: '0 auto',
+      lineHeight: '1.8'
+    }}
+  >
+    {t('slogan_paragraph')}
+  </p>
+</Container>
+
   </>
 ) : (
   <Link to="/" className="btn btn-light mb-4">Go Back</Link>
 )}
+
+<Container className="my-5">
+  <Row className="justify-content-center">
+    <Col md={10}>
+      <div
+        className="text-center"
+        style={{
+          background: 'linear-gradient(135deg, #e0f7fa 0%, #f1f8e9 100%)',
+          borderRadius: '20px',
+          padding: '35px 25px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          border: '1px solid #b2dfdb',
+        }}
+      >
+        <h3 style={{ color: '#00796b', fontWeight: 'bold' }}>✅ {t('authorized_reseller')}</h3>
+        <p
+          className="mt-3"
+          style={{
+            fontSize: '1.15rem',
+            maxWidth: '700px',
+            margin: '0 auto',
+            color: '#424242',
+          }}
+        >
+          {t('authorized_reseller_info')}
+        </p>
+      </div>
+    </Col>
+  </Row>
+</Container>
 
 <Container className="my-5">
   <h3 className="text-center mb-4" style={{ color: '#283C79', fontWeight: 'bold' }}>
@@ -215,54 +246,75 @@ const HomeScreen = () => {
 
           
 
-          <h1>Latest Products</h1>
-          <Row>
-            {data.products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
-          <Paginate pages={data.pages} page={data.page} keyword={keyword || ''} />
+         {/*
+  <h1>Latest Products</h1>
+  <Row>
+    {data.products.map((product) => (
+      <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+        <Product product={product} />
+      </Col>
+    ))}
+  </Row>
+  <Paginate pages={data.pages} page={data.page} keyword={keyword || ''} />
+*/}
 
 
-          <Container className="my-5">
-  <h3 className="text-center mb-4" style={{ color: '#283C79', fontWeight: 'bold' }}>
-    Electrical Marine Services – Corfu Location
-  </h3>
 
-  <Row className="align-items-center">
-    <Col md={7} className="mb-4 mb-md-0">
-      <div className="d-flex justify-content-center">
+<Container className="my-5">
+  <Row className="g-4 align-items-start">
+    <Col md={6}>
+      <div
+        style={{
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+        }}
+      >
         <iframe
           title="EMS Corfu Location"
           src="https://www.google.com/maps?q=39.645001742961725,19.851914724030458&z=18&output=embed"
           width="100%"
-          height="450"
-          style={{
-            border: 0,
-            borderRadius: '12px',
-            width: '100%',
-          }}
-          allowFullScreen=""
+          height="320"
+          style={{ border: 0 }}
+          allowFullScreen
           loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
+        />
       </div>
     </Col>
 
-    <Col md={5}>
-      <div style={{
-        backgroundColor: '#f8f9fa',
-        borderRadius: '12px',
-        padding: '20px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-      }}>
-        <h5 style={{ color: '#283C79', fontWeight: 'bold' }}>Contact Info</h5>
-        <p className="mb-1"><strong>Address:</strong> Gouvia Marina, Corfu, Greece</p>
-        <p className="mb-1"><strong>Phone:</strong> <a href="tel:+302661401219" style={{ color: '#283C79' }}>+30 2661401219</a></p>
-        <p className="mb-1"><strong>Email:</strong> <a href="mailto:info@ionianems.com" style={{ color: '#283C79' }}>info@ionianems.com</a></p>
-        <p className="mb-0"><strong>Hours:</strong> Mon–Sat: 9:00–18:00</p>
+    <Col md={6}>
+      {/* 🖼️ Store Image ABOVE the contact box */}
+      <div
+        style={{
+          borderRadius: '12px',
+          overflow: 'hidden',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+          marginBottom: '20px',
+        }}
+      >
+        <img
+          src="/images/store_photo.jpg"
+          alt="EMS Store"
+          className="img-fluid"
+          style={{ width: '100%', height: '250px', objectFit: 'cover' }}
+        />
+      </div>
+
+      {/* 📞 Contact Info box */}
+      <div
+        style={{
+          background: '#f9fbe7',
+          borderRadius: '16px',
+          padding: '25px',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+        }}
+      >
+        <h5 className="mb-3" style={{ color: '#33691e', fontWeight: 'bold' }}>{t('contact_info')}</h5>
+        <p><strong>📍 {t('address')}:</strong> Gouvia Marina, Corfu, Greece</p>
+        <p><strong>📞 {t('phone')}:</strong> <a href="tel:+302661401219">+30 2661401219</a></p>
+        <p><strong>📞 {t('phone')}:</strong> <a href="tel:+306987795043">+30 6987795043</a></p>
+        <p><strong>✉️ {t('email')}:</strong> <a href="mailto:info@ionianems.com">info@ionianems.com</a></p>
+        <p><strong>⏰ {t('hours')}:</strong> Mon–Sat: 9:00–18:00</p>
       </div>
     </Col>
   </Row>
