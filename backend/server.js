@@ -37,7 +37,7 @@ const app = express();
 
 // ----- ✅ CORS Configuration -----
 const allowedOrigins = [
-  'http://localhost:3000',
+  'https://www.ionianems.com',
   'https://ionianems-frontend.onrender.com',
 ];
 
