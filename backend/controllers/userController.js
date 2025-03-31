@@ -82,7 +82,7 @@ const registerUser = asyncHandler(async (req, res) => {
   );
 
  
-  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${emailToken}`;
+  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${emailToken}`;
 
 
   // Send verification email
