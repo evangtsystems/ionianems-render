@@ -81,7 +81,8 @@ const registerUser = asyncHandler(async (req, res) => {
     { expiresIn: EMAIL_TOKEN_EXPIRES_IN }
   );
 
-  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${emailToken}`;
+ 
+  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${emailToken}`;
 
 
   // Send verification email
