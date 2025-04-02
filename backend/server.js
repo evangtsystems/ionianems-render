@@ -11,6 +11,8 @@ import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import categoryRoutes from "./routes/categoryRoutes.js";
+import contactRoutes from './routes/contactRoutes.js';
+
 
 
 // ✅ Load environment variables early
@@ -71,6 +73,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use('/api/contact', contactRoutes);
+
 
 // ✅ PayPal Config Route
 app.get('/api/config/paypal', (req, res) =>

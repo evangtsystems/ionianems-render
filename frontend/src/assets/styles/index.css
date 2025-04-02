@@ -154,7 +154,7 @@ main {
 }
 
 /* ✅ Navbar Shrink Handling (1200px - 1656px) */
-@media (max-width: 1656px) and (min-width: 1200px) {
+@media (max-width: 1656px) and (min-width: 1400px) {
   .custom-navbar {
     height: 140px !important;
     background-color: #283C79 !important;
@@ -296,6 +296,28 @@ main {
     align-items: center !important;
   }
 }
+
+@media (max-width: 1656px) and (min-width: 1400px) {
+  .navbar-nav {
+    flex-wrap: nowrap !important;        /* 🔒 Prevent line breaks */
+    justify-content: center !important;
+    gap: 16px !important;                /* 🔧 Reduce gap to fit more items */
+    overflow: visible !important; /* ✅ Let dropdowns escape */
+  }
+
+  .navbar-nav .nav-link,
+  .navbar-nav .dropdown-toggle {
+    white-space: nowrap !important;      /* 🔒 Force each item on one line */
+    font-size: 14px !important;          /* 🔧 Optional: shrink slightly */
+    padding: 6px 12px !important;
+  }
+
+  .custom-navbar {
+    padding: 0 32px !important;         /* Reduce padding to gain space */
+  }
+}
+
+
 
 .navbar-toggler {
   position: relative;
