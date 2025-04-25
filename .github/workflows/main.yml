@@ -2,9 +2,8 @@ name: Keep Render Services Alive
 
 on:
   schedule:
-  - cron: "0 10 * * *"  # Runs every day at 04:00 (i.e., every 24h)
-
-  workflow_dispatch:        # 👈 Allows manual trigger for testing
+    - cron: "*/10 * * * *"  # Runs every 10 minutes
+  workflow_dispatch:        # Allows manual trigger for testing
 
 jobs:
   ping_services:
