@@ -3,30 +3,48 @@ name: Keep Render Services Alive
 on:
   schedule:
     - cron: "*/15 * * * *"  # Runs every 15 minutes
-  workflow_dispatch:        # Allows manual trigger for testing
+  workflow_dispatch:        # Manual trigger
 
 jobs:
   ping_services:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo test to confirm workflow runs
-        run: echo "🔁 Workflow has started!"
+      - name: 🔁 Confirm workflow is running
+        run: echo "Workflow triggered successfully!"
 
-      - name: Ping Render Backend
+      - name: 🔍 Ping Render Backend with Retry
         run: |
-          RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" https://ionianems-backend.onrender.com/ )
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "Backend might be down! Status code: $RESPONSE"
-            exit 1
-          fi
-          echo "Backend is alive! ✅"
+          URL="https://ionianems-backend.onrender.com/"
+          for i in {1..5}; do
+            RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
+            echo "Attempt $i - Backend Response: $RESPONSE"
+            if [ "$RESPONSE" -eq 200 ]; then
+              echo "✅ Backend is alive!"
+              break
+            elif [ "$RESPONSE" -eq 429 ]; then
+              echo "⚠️ Backend rate-limited. Waiting 20 seconds..."
+              sleep 20
+            else
+              echo "❌ Unexpected backend error: $RESPONSE"
+              exit 1
+            fi
+          done
 
-      - name: Ping Render Frontend
+      - name: 🔍 Ping Render Frontend with Retry
         run: |
-          RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" https://ionianems-frontend.onrender.com/ )
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "Frontend might be down! Status code: $RESPONSE"
-            exit 1
-          fi
-          echo "Frontend is alive! ✅"
+          URL="https://ionianems-frontend.onrender.com/"
+          for i in {1..5}; do
+            RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
+            echo "Attempt $i - Frontend Response: $RESPONSE"
+            if [ "$RESPONSE" -eq 200 ]; then
+              echo "✅ Frontend is alive!"
+              break
+            elif [ "$RESPONSE" -eq 429 ]; then
+              echo "⚠️ Frontend rate-limited. Waiting 20 seconds..."
+              sleep 20
+            else
+              echo "❌ Unexpected frontend error: $RESPONSE"
+              exit 1
+            fi
+          done
 
