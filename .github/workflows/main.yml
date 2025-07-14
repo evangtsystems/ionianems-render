@@ -14,7 +14,7 @@ jobs:
 
       - name: 🔍 Ping Render Backend with Retry
         run: |
-          URL="https://ionianems-backend.onrender.com/api/contact"
+          URL="https://ionianems-backend.onrender.com/api/products"
           for i in {1..5}; do
             RESPONSE=$(curl -A "Mozilla/5.0" -o /dev/null -s -w "%{http_code}" "$URL")
             echo "Attempt $i - Backend Response: $RESPONSE"
