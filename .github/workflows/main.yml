@@ -1,19 +1,22 @@
-name: Keep Render Services Alive
+name: Keep Render Services Alive (Business Hours Only)
 
 on:
   schedule:
-    - cron: "*/15 * * * *"  # Runs every 15 minutes
+    - cron: "*/15 * * * *"  # Every 15 minutes
   workflow_dispatch:
 
 jobs:
   ping_services:
     runs-on: ubuntu-latest
     steps:
-      - name: 🔁 Confirm workflow is running
-        run: echo "Workflow triggered successfully!"
+      - name: ⏰ Get current UTC hour
+        id: time
+        run: echo "hour=$(date -u '+%H')" >> $GITHUB_OUTPUT
 
-      - name: 🔍 Ping Render Backend with Retry
+      - name: 🔍 Ping Render Backend (Only During Business Hours)
+        if: ${{ steps.time.outputs.hour >= '09' && steps.time.outputs.hour < '17' }}
         run: |
+          echo "✅ Within business hours: proceeding to ping"
           URL="https://ionianems-backend.onrender.com/api/products"
           for i in {1..5}; do
             RESPONSE=$(curl -A "Mozilla/5.0" -o /dev/null -s -w "%{http_code}" "$URL")
@@ -26,6 +29,11 @@ jobs:
               sleep 20
             else
               echo "❌ Unexpected backend error: $RESPONSE"
-              exit 1
+              sleep 5
             fi
           done
+
+      - name: 🚫 Skip ping outside business hours
+        if: ${{ steps.time.outputs.hour < '09' || steps.time.outputs.hour >= '17' }}
+        run: echo "⏳ Outside business hours (UTC). Skipping ping."
+
