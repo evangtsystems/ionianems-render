@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend   # run npm in /backend
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
 
@@ -26,6 +26,5 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ionianems-backend-hkgghubjeqgyctdc
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: ./backend
