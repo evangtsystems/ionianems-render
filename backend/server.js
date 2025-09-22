@@ -39,10 +39,10 @@ const app = express();
 
 // ----- ✅ CORS Configuration -----
 const allowedOrigins = [
-  'https://www.ionianems.com',
-  'https://ionianems-frontend.onrender.com',
+  "http://localhost:3000",   // ✅ for dev frontend
+  "https://www.ionianems.com",
+  "https://ionianems-frontend.onrender.com"
 ];
-
 app.use(
   cors({
     origin: function (origin, callback) {
