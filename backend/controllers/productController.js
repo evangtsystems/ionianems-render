@@ -55,7 +55,9 @@ const createProduct = asyncHandler(async (req, res) => {
     name: name || 'New Product', // Default to 'New Product' if name is empty
     price: price || 0,
     user: req.user._id,
-    image: image || '/images/sample.jpg',
+    image: image || 'https://res.cloudinary.com/dnbyhou0d/image/upload/v1758722360/ChatGPT_Image_Sep_24_2025_04_57_07_PM_emwjb3.png',
+
+
     brand: brand || 'Brand Name',
     category: category || 'Category Name',
     countInStock: countInStock || 0,
