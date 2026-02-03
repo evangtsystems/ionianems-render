@@ -41,7 +41,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",   // ✅ for dev frontend
   "https://www.ionianems.com",
-  "https://ionianems-frontend.onrender.com"
+  "https://ionianems-frontend.onrender.com",
+  "https://ionianems.com",
 ];
 app.use(
   cors({
