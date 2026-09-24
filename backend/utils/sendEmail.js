@@ -1,29 +1,38 @@
-import nodemailer from 'nodemailer';
-
 const sendEmail = async ({ email, subject, message }) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: false, // Use TLS (false for port 587)
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': process.env.BREVO_API_KEY,
+        'content-type': 'application/json',
       },
+      body: JSON.stringify({
+        sender: {
+          name: process.env.EMAIL_FROM_NAME || 'IonianEMS',
+          email: process.env.EMAIL_FROM_EMAIL,
+        },
+        to: [
+          {
+            email,
+          },
+        ],
+        subject,
+        textContent: message,
+      }),
     });
 
-    const mailOptions = {
-      from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
-      to: email,
-      subject: subject,
-      text: message,
-    };
+    const data = await response.json().catch(() => ({}));
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email Sent: ", info.response);
+    if (!response.ok) {
+      console.error('🚨 Brevo Email Error:', response.status, data);
+      throw new Error('Brevo email failed');
+    }
+
+    console.log('✅ Email Sent via Brevo:', data.messageId || 'OK');
   } catch (error) {
-    console.error("🚨 Email Sending Error:", error.message);
-    throw new Error("Failed to send email. Check SMTP settings.");
+    console.error('🚨 Email Sending Error:', error.message);
+    throw new Error('Failed to send email.');
   }
 };
 
